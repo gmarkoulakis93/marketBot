@@ -33,7 +33,7 @@ def messageDict(stuff):
   return {
     "Sup":"I'm well. How are you?",
     "Sup?":"I'm well. How are you?",
-    "3 loaves of bread, a 6 pack of beer, and ground beef":"Sounds great, please review this receipt. Say 'OK' if this is the correct order"
+    "3 loaves of bread, a 6 pack of beer, and ground beef":"Sounds great, please review this receipt. Say 'OK' if this is the correct order",
   }.get(stuff, "I'm sorry, I didn't understand")
 
 def messaging_events(payload):
