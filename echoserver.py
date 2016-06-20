@@ -37,8 +37,8 @@ def messaging_events(payload):
   for event in messaging_events:
     if "message" in event and "text" in event["message"]:
       if event["message"]["text"] == "Sup":
-        #yield event["sender"]["id"], event[0:2][-1][-1][0]="image" and event[0:2][-1][-1][-1]="https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
-        yield event["sender"]["id"], "Figure out images later".encode('unicode_escape')
+        yield event["sender"]["id"], event[0:2][1][1][0]="image" and event[0:2][1][1][1]="https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
+        #yield event["sender"]["id"], "Figure out images later".encode('unicode_escape')
       else:
       #yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
         yield event["sender"]["id"], "Argh".encode('unicode_escape')
@@ -49,14 +49,29 @@ def messaging_events(payload):
 def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
-
-  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
-    params={"access_token": token},
-    data=json.dumps({
-      "recipient": {"id": recipient},
-      "message": {"text": text.decode('unicode_escape')}
-    }),
-    headers={'Content-type': 'application/json'})
+  if text == "Sup":
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+      params={"access_token": token},
+      data=json.dumps({
+        "recipient": {"id": recipient},
+        "message": {
+          "attachment":{
+            "type":"image",
+            "payload":{
+              "https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
+            }
+          }
+        }
+      }),
+      headers={'Content-type': 'application/json'})
+  else:
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+      params={"access_token": token},
+      data=json.dumps({
+        "recipient": {"id": recipient},
+        "message": {"text": text.decode('unicode_escape')}
+      }),
+      headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
 
