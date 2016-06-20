@@ -28,6 +28,14 @@ def handle_messages():
     send_message(PAT, sender, message)
   return "ok"
 
+def messageDict(stuff):
+  #defines what responses we will give to different text inputs
+  return {
+    "Sup":"I'm well. How are you?",
+    "Sup?":"I'm well. How are you?",
+    "3 loaves of bread, a 6 pack of beer, and ground beef":"Sounds great, please review this receipt. Say 'OK' if this is the correct order"
+  }.get(stuff, "I'm sorry, I didn't understand")
+
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
   provided payload.
@@ -36,12 +44,13 @@ def messaging_events(payload):
   messaging_events = data["entry"][0]["messaging"]
   for event in messaging_events:
     if "message" in event and "text" in event["message"]:
-      if event["message"]["text"] == "Sup":
+      messageDict(event["message"]["text"])
+      #if event["message"]["text"] == "Sup":
         #yield event["sender"]["id"], event["type"]:"image" and event["url"]:"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
-        yield event["sender"]["id"], "Figure out images later".encode('unicode_escape')
-      else:
+       # yield event["sender"]["id"], "Figure out images later".encode('unicode_escape')
+      #else:
       #yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
-        yield event["sender"]["id"], "Argh".encode('unicode_escape')
+       # yield event["sender"]["id"], "Argh".encode('unicode_escape')
     else:
       yield event["sender"]["id"], "I can't echo this"
 
