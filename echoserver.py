@@ -49,6 +49,8 @@ def messaging_events(payload):
   for event in messaging_events:
     if "message" in event and "text" in event["message"]:
       yield event["sender"]["id"], messageDict(event["message"]["text"]).encode('unicode_escape')
+    elif "message" in event and "attachment" in event["message"]:
+      yield event["sender"]["id"], event["type"]:"image" and event["url"]:"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
       #if event["message"]["text"] == "Sup":
         #yield event["sender"]["id"], event["type"]:"image" and event["url"]:"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
        # yield event["sender"]["id"], "Figure out images later".encode('unicode_escape')
