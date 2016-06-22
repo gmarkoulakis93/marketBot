@@ -48,7 +48,12 @@ def messaging_events(payload):
   messaging_events = data["entry"][0]["messaging"]
   for event in messaging_events:
     if "message" in event and "text" in event["message"]:
-      yield event["sender"]["id"], messageDict(event["message"]["text"]).encode('unicode_escape')
+      yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
+    else:
+      yield event["sender"]["id"], "I can't echo this"
+  #for event in messaging_events:
+  #  if "message" in event and "text" in event["message"]:
+  #    yield event["sender"]["id"], messageDict(event["message"]["text"]).encode('unicode_escape')
     #elif "message" in event and "attachment" in event["message"]:
     #  yield event["sender"]["id"], event["url"]:"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
       #if event["message"]["text"] == "Sup":
@@ -57,8 +62,8 @@ def messaging_events(payload):
       #else:
       #yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
        # yield event["sender"]["id"], "Argh".encode('unicode_escape')
-    else:
-      yield event["sender"]["id"], "I can't echo this"
+#    else:
+#      yield event["sender"]["id"], "I can't echo this"
 
 def send_image(token, recipient, text):
   """Send the message text to recipient with id recipient.
@@ -88,9 +93,21 @@ def send_message(token, recipient, text):
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     data=json.dumps({
-      "recipient": {"id": recipient},
-      "message": {"text": text.decode('unicode_escape')}
-    }),
+      "recipient":{
+        "id":recipient
+      },
+      "message":{
+        "attachment":{
+          "type":"image",
+          "payload":{
+            "url":"https://petersapparel.com/img/shirt.png"
+      }
+    }
+  }
+}),
+#      "recipient": {"id": recipient},
+#      "message": {"text": text.decode('unicode_escape')}
+#    }),
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
