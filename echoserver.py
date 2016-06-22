@@ -71,7 +71,7 @@ def send_image(token, recipient, text):
         "attachment": {
           "type":"image",
           "payload":{
-            image_url
+            text
           }
         }
       }
