@@ -71,7 +71,7 @@ def send_image(token, recipient, text):
         "attachment": {
           "type":"image",
           "payload":{
-            "https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
+            image_url
           }
         }
       }
