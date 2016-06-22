@@ -28,7 +28,7 @@ def handle_messages():
     #if message == "Avy":
     #  send_image(PAT, sender, message)
     #else:
-    send_message(PAT, sender, message)
+    send_image(PAT, sender, message)
   return "ok"
 
 def messageDict(stuff):
@@ -71,16 +71,18 @@ def send_image(token, recipient, text):
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     data=json.dumps({
-      "recipient": {"id": recipient},
-      "message": {
-        "attachment": {
+      "recipient":{
+        "id":recipient
+      },
+      "message":{
+        "attachment":{
           "type":"image",
           "payload":{
-            text
-          }
-        }
+            "url":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
       }
-    }),
+    }
+  }
+}),
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
@@ -93,17 +95,8 @@ def send_message(token, recipient, text):
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     data=json.dumps({
-      "recipient":{
-        "id":recipient
-      },
-      "message":{
-        "attachment":{
-          "type":"image",
-          "payload":{
-            "url":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
-      }
-    }
-  }
+      "recipient": {"id": recipient},
+      "message": {"text": text.decode('unicode_escape')}
 }),
 #      "recipient": {"id": recipient},
 #      "message": {"text": text.decode('unicode_escape')}
