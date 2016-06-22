@@ -25,7 +25,10 @@ def handle_messages():
   print payload
   for sender, message in messaging_events(payload):
     print "Incoming from %s: %s" % (sender, message)
-    send_message(PAT, sender, message)
+    if message = "Avy":
+      send_image(PAT, sender, message)
+    else:
+      send_message(PAT, sender, message)
   return "ok"
 
 def messageDict(stuff):
@@ -34,6 +37,7 @@ def messageDict(stuff):
     "Sup":"I'm well. How are you?",
     "Sup?":"I'm well. How are you?",
     "3 loaves of bread, a 6 pack of beer, and ground beef":"Sounds great, please review this receipt. Say 'OK' if this is the correct order",
+    "Avy":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
   }.get(stuff, "I'm sorry, I didn't understand")
 
 def messaging_events(payload):
@@ -53,6 +57,26 @@ def messaging_events(payload):
        # yield event["sender"]["id"], "Argh".encode('unicode_escape')
     else:
       yield event["sender"]["id"], "I can't echo this"
+
+def send_image(token, recipient, text):
+  """Send the message text to recipient with id recipient.
+  """
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient": {"id": recipient},
+      "message": {
+        "attachment": {
+          "type":"image",
+          "payload":{
+            text.decode('unicode_escape')
+          }
+        }
+      }
+    }),
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
 
 
 def send_message(token, recipient, text):
