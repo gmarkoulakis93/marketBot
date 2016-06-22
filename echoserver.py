@@ -28,7 +28,7 @@ def handle_messages():
     #if message == "Avy":
     #  send_image(PAT, sender, message)
     #else:
-      send_message(PAT, sender, message)
+    send_message(PAT, sender, message)
   return "ok"
 
 def messageDict(stuff):
