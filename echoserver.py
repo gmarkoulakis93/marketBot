@@ -28,7 +28,7 @@ def handle_messages():
     #if message == "Avy":
     #  send_image(PAT, sender, message)
     #else:
-    send_image(PAT, sender, message)
+    send_receipt(PAT, sender, message)
   return "ok"
 
 def messageDict(stuff):
@@ -88,7 +88,7 @@ def send_image(token, recipient, text):
     print r.text
 
 
-def send_message1(token, recipient, text):
+def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
 
@@ -102,7 +102,7 @@ def send_message1(token, recipient, text):
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
-def send_message(token, recipient, text):
+def send_receipt(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
 
