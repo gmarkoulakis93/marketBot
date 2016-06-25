@@ -28,7 +28,7 @@ def handle_messages():
     #if message == "Avy":
     #  send_image(PAT, sender, message)
     #else:
-    send_receipt(PAT, sender, message)
+    send_message(PAT, sender, message)
   return "ok"
 
 def messageDict(stuff):
@@ -96,7 +96,7 @@ def send_message(token, recipient, text):
     params={"access_token": token},
     data=json.dumps({
       "recipient": {"id": recipient},
-      "message": {"text": text.decode('unicode_escape')}
+      "message": {"text": messageDict(text.decode('unicode_escape'))}
 }),
 
     headers={'Content-type': 'application/json'})
