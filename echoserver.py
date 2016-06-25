@@ -32,8 +32,6 @@ def handle_messages():
       send_receipt(PAT, sender, message)
     else:
       send_message(PAT, sender, message)
-        if message == "y":
-          send_message(PAT, sender, message)
   return "ok"
 
 def messageDict(stuff):
