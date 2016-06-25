@@ -31,7 +31,13 @@ def handle_messages():
     if message == "Receipt":
       send_receipt(PAT, sender, message)
     else:
-      send_message(PAT, sender, message)
+      if "milk" in message:
+        message.split(' ')
+        place = message.index("milk")-2
+        q = message[place]
+        send_receipt(PAT, sender, message)
+      else:
+        send_message(PAT, sender, message)
   return "ok"
 
 def messageDict(stuff):
@@ -139,7 +145,7 @@ def send_receipt(token, recipient, text):
                 {
                   "title":"Clover Milk",
                   "subtitle":"Whole Fat",
-                  "quantity":1,
+                  "quantity":q,
                   "price":2.50,
                   "currency":"USD",
                   "image_url":"http://www.clover.co.za/zpimages/thumb/450/550/data/products/milk_2_fresh_2l.png"
