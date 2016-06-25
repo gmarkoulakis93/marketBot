@@ -136,12 +136,12 @@ def send_receipt(token, recipient, text):
                   "image_url":"http://petersapparel.parseapp.com/img/whiteshirt.png"
                 },
                 {
-                  "title":"Classic Gray T-Shirt",
-                  "subtitle":"100% Soft and Luxurious Cotton",
+                  "title":"Clover Milk",
+                  "subtitle":"Whole Fat",
                   "quantity":1,
-                  "price":25,
+                  "price":2.50,
                   "currency":"USD",
-                  "image_url":"http://petersapparel.parseapp.com/img/grayshirt.png"
+                  "image_url":"http://www.clover.co.za/zpimages/thumb/450/550/data/products/milk_2_fresh_2l.png"
                 }
               ],
               "address":{
