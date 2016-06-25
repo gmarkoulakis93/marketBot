@@ -37,7 +37,8 @@ def handle_messages():
 def messageDict(stuff):
   #defines what responses we will give to different text inputs
   return {
-    "Sup":"I'm well. How are you?",
+    "Sup":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order?",
+    "y"  :"Great. What would you like?"
     "Sup?":"I'm well. How are you?",
     "3 loaves of bread, a 6 pack of beer, and ground beef":"Sounds great, please review this receipt. Say 'OK' if this is the correct order",
     "Avy":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
