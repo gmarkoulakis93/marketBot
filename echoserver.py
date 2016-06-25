@@ -32,7 +32,7 @@ def handle_messages():
       send_receipt(PAT, sender, message)
     else:
       if "milk" in message:
-        message.split(' ')
+        #message.split(' ')
         place = message.index("milk")-2
         q = message[place]
         send_receipt(PAT, sender, message)
