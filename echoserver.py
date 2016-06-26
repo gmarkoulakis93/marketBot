@@ -42,6 +42,7 @@ def handle_messages():
           global q
           q=myList[n]
         send_receipt(PAT, sender, message)
+        send_message(PAT, sender, message)
       else:
         send_message(PAT, sender, message)
   return "ok"
@@ -54,7 +55,7 @@ def messageDict(stuff):
     "Sup?":"I'm well. How are you?",
     "3 loaves of bread, a 6 pack of beer, and ground beef":"Sounds great, please review this receipt. Say 'OK' if this is the correct order",
     "Avy":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
-  }.get(stuff, "I'm sorry, I didn't understand")
+  }.get(stuff, "Is this what you'd like? If so, enter 'Y'")
 
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
