@@ -35,7 +35,7 @@ def handle_messages():
       if "milk" in message:
         #message.split(' ')
         myList = message.split(' ')
-        n = len(myList)
+        n = len(myList)-1
         while myList[n].isalpha():
           n=n-1
         else:
