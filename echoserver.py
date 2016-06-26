@@ -34,9 +34,13 @@ def handle_messages():
     else:
       if "milk" in message:
         #message.split(' ')
-        place = message.index("milk")-2
-        global q
-        q = message[place]
+        myList = message.split(' ')
+        n = len(myList)
+        while myList[n].isalpha():
+          n=n-1
+        else:
+          global q
+          q=myList[n]
         send_receipt(PAT, sender, message)
       else:
         send_message(PAT, sender, message)
