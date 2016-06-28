@@ -169,7 +169,7 @@ def send_receipt(token, recipient, text):
               "address":{
                 "street_1":"1 Hacker Way",
                 "street_2":"",
-                "city":"Burlingame"#findAddress(recipient),
+                "city":"Burlingame", #findAddress(recipient),
                 "postal_code":"94025",
                 "state":"CA",
                 "country":"US"
