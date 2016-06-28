@@ -130,7 +130,7 @@ def send_message(token, recipient, text):
 def send_receipt(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
-  city = findAddress(recipient)
+  city = str(findAddress(recipient))
 
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
