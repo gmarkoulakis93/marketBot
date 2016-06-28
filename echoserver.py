@@ -1,6 +1,8 @@
 from flask import Flask, request
 import json
 import requests
+from csvRead import findAddress
+import csv
 
 app = Flask(__name__)
 
@@ -161,7 +163,7 @@ def send_receipt(token, recipient, text):
               "address":{
                 "street_1":"1 Hacker Way",
                 "street_2":"",
-                "city":"Menlo Park",
+                "city":findAddress(recipient),
                 "postal_code":"94025",
                 "state":"CA",
                 "country":"US"
