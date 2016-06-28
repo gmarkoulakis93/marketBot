@@ -130,7 +130,6 @@ def send_message(token, recipient, text):
 def send_receipt(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
-  city = str(findAddress(recipient))
 
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
@@ -170,7 +169,7 @@ def send_receipt(token, recipient, text):
               "address":{
                 "street_1":"1 Hacker Way",
                 "street_2":"",
-                "city":city,
+                "city":str(findAddress(recipient)),
                 "postal_code":"94025",
                 "state":"CA",
                 "country":"US"

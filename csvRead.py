@@ -4,5 +4,5 @@ def findAddress(recipient):
 		reader = csv.DictReader(csvfile)
 		for row in reader:
 			if row['m_id']==recipient:
-				print (row['city'])
+				row['city']
 			pass
