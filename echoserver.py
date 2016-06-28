@@ -35,6 +35,7 @@ def handle_messages():
       send_receipt(PAT, sender, message)
     else:
       if "milk" in message:
+        message.replace("one","1")
         #message.split(' ')
         myList = message.split(' ')
         n = len(myList)-1
