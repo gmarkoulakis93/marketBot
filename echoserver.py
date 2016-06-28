@@ -38,13 +38,17 @@ def handle_messages():
         message.replace("one","1")
         #message.split(' ')
         myList = message.split(' ')
-        otherList = myList
         n = len(myList)-1
-        while otherList[n].isalpha():
-          n=n-1
-        else:
-          global q
-          q=myList[n]
+        #while myList[n].isalpha():
+        #  n=n-1
+        for i in range(0,n):
+          if not myList[i].isalpha():
+            global q
+            q=myList[i]
+          else:
+            pass  
+          #global q
+          #q=myList[n]
         send_receipt(PAT, sender, message)
         send_message(PAT, sender, message)
       else:
