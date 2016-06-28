@@ -38,8 +38,9 @@ def handle_messages():
         message.replace("one","1")
         #message.split(' ')
         myList = message.split(' ')
+        otherList = myList
         n = len(myList)-1
-        while myList[n].isalpha():
+        while otherList[n].isalpha():
           n=n-1
         else:
           global q
