@@ -138,7 +138,7 @@ def send_receipt(token, recipient, text):
       in_data['message']['attachment']['payload']['address']['city']= findAddress(recipient)
     else:
       pass
-    out_data=simplejson.dumps(in_data)
+    out_data=json.dumps(in_data)
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
