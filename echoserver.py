@@ -133,7 +133,7 @@ def send_receipt(token, recipient, text):
 
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
-    data=json.dumps({
+    in_data=json.loads({
       "recipient":{
           "id":recipient
         },
@@ -169,7 +169,7 @@ def send_receipt(token, recipient, text):
               "address":{
                 "street_1":"1 Hacker Way",
                 "street_2":"",
-                "city":str(findAddress(recipient)),
+                "city":"San Francisco"
                 "postal_code":"94025",
                 "state":"CA",
                 "country":"US"
@@ -194,6 +194,11 @@ def send_receipt(token, recipient, text):
       }
     }
   }),
+    if in_data['message']['attachment']['payload']['address']['city']=="San Francisco":
+      in_data['message']['attachment']['payload']['address']['city']= findAddress(recipient)
+    else:
+      pass
+    out_data=json.dumps(in_data)
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
