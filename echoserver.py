@@ -1,6 +1,5 @@
 from flask import Flask, request
 import json
-import simplejson
 import requests
 from csvRead import findAddress
 import csv
