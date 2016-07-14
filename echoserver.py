@@ -2,8 +2,8 @@ from flask import Flask, request
 import json
 import requests
 from csvRead import findAddress
-from stripPunct import stripPunct
-from createOrder import createOrder
+from stripPunct import noPunct
+from createOrder import forReceipt
 import csv
 #ugh
 app = Flask(__name__)
@@ -47,8 +47,8 @@ def handle_messages():
         myList   = message.split(' ')
         n = 2
         tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
-        stripPunct(tuplesL)
-        createOrder(tuplesL, menu_items, order)
+        noPunct(tuplesL)
+        forReceipt(tuplesL, menu_items, order)
         for pair in tuplesL:
           global myDict
           myDict = {"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])}
