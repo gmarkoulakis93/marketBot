@@ -16,6 +16,36 @@ menu_items = ["bread", "beer", "milk", "cheese", "steak"]
 
 myDict = {}
 
+def titleDict(food):
+  return {
+    "milk":"Clover Milk Non-Fat",
+    "bread":"Semi-Freddis Ciabatta",
+    "beer":"6-pack of Ballast Point",
+    "cheese":"Tillamook Cheddar",
+  }.get(food,"Hmm, not sure what happened. Try again?")
+
+def subtitle(food):
+  return {
+    "milk":"One Gallon",
+    "beer":"Rated number one on Beer Advocate",
+    "bread":" ",
+  }.get(food, " ")
+
+def pricing(food):
+  return {
+    "milk":6,
+    "bread":10,
+    "beer":13,
+    "cheese":4,
+  }.get(food, "We'll need to check on that")
+
+def pic(food):
+  return {
+    "milk":"http://www.clover.co.za/zpimages/thumb/450/550/data/products/milk_2_fresh_2l.png",
+    "bread":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
+    "beer":"http://www.southernspirits.com/wp-content/uploads/2016/02/ballast-point.jpg",
+  }.get(food, " ")
+
 @app.route('/', methods=['GET'])
 def handle_verification():
   print "Handling Verification."
