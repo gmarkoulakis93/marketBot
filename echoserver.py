@@ -2,8 +2,8 @@ from flask import Flask, request
 import json
 import requests
 from csvRead import findAddress
-import stripPunct
-import createOrder
+from stripPunct import stripPunct
+from createOrder import createOrder
 import csv
 #ugh
 app = Flask(__name__)
