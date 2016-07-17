@@ -1,3 +1,4 @@
+import string
 def noPunct(myList):
 	punct = set(string.punctuation)
 	x = 0
