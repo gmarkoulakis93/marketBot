@@ -1,13 +1,50 @@
 from flask import Flask, request
 import json
 import requests
+from csvRead import findAddress
+from stripPunct import noPunct
+from createOrder import forReceipt
+import csv
 
 app = Flask(__name__)
 
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
 PAT = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKnq5T32wVjqZApG6bKOFujVdZAr2DX31SXTKqZC2ZCZAf8NBOHGqrtGwpGZB9sOWjar6n3XifD6G7ywuMrMNbH75dGpw9oYadgdtqVPCrhIU29p2pzwZDZD'
-q=0
+
+menu_items = ["bread", "beer", "milk", "cheese", "steak"]
+
+myDicts = []
+
+def titleDict(food):
+  return {
+    "milk":"Clover Milk Non-Fat",
+    "bread":"Semi-Freddis Ciabatta",
+    "beer":"6-pack of Ballast Point",
+    "cheese":"Tillamook Cheddar",
+  }.get(food,"Hmm, not sure what happened. Try again?")
+
+def subtitle(food):
+  return {
+    "milk":"One Gallon",
+    "beer":"Rated number one on Beer Advocate",
+    "bread":"text",
+  }.get(food, "Bla")
+
+def pricing(food):
+  return {
+    "milk":6,
+    "bread":10,
+    "beer":13,
+    "cheese":4,
+  }.get(food, "We'll need to check on that")
+
+def pic(food):
+  return {
+    "milk":"http://www.clover.co.za/zpimages/thumb/450/550/data/products/milk_2_fresh_2l.png",
+    "bread":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
+    "beer":"http://www.southernspirits.com/wp-content/uploads/2016/02/ballast-point.jpg",
+  }.get(food, "N/A")
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -32,15 +69,19 @@ def handle_messages():
     if message == "Receipt":
       send_receipt(PAT, sender, message)
     else:
-      if "milk" in message:
+      if "I want" in message:
+        print ("Receipt should send")
+        message.replace("one","1")
+        message.replace("a","1")
         #message.split(' ')
-        myList = message.split(' ')
-        n = len(myList)-1
-        while myList[n].isalpha():
-          n=n-1
-        else:
-          global q
-          q=myList[n]
+        order    = []
+        myList   = message.split(' ')
+        n        = 2
+        tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
+        noPunct(tuplesL)
+        forReceipt(tuplesL, menu_items, order)
+        for pair in order:
+          myDicts.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
         send_receipt(PAT, sender, message)
         send_message(PAT, sender, message)
       else:
@@ -68,19 +109,6 @@ def messaging_events(payload):
       yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
     else:
       yield event["sender"]["id"], "I can't echo this"
-  #for event in messaging_events:
-  #  if "message" in event and "text" in event["message"]:
-  #    yield event["sender"]["id"], messageDict(event["message"]["text"]).encode('unicode_escape')
-    #elif "message" in event and "attachment" in event["message"]:
-    #  yield event["sender"]["id"], event["url"]:"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
-      #if event["message"]["text"] == "Sup":
-        #yield event["sender"]["id"], event["type"]:"image" and event["url"]:"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
-       # yield event["sender"]["id"], "Figure out images later".encode('unicode_escape')
-      #else:
-      #yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
-       # yield event["sender"]["id"], "Argh".encode('unicode_escape')
-#    else:
-#      yield event["sender"]["id"], "I can't echo this"
 
 def send_image(token, recipient, text):
   """Send the message text to recipient with id recipient.
@@ -122,71 +150,15 @@ def send_message(token, recipient, text):
 def send_receipt(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
-
+  in_data=json.loads('{"recipient":{"id":"recipient"},"message":{"attachment":{"type":"template","payload":{"template_type":"receipt","recipient_name":"Stephane Crozatier","order_number":"12345678902","currency":"USD","payment_method":"Visa 2345",        "order_url":"http://petersapparel.parseapp.com/order?order_id=123456","timestamp":"1428444852", "elements":[],"address":{"street_1":"1 Hacker Way","street_2":"","city":"San Francisco","postal_code":"94025","state":"CA","country":"US"},"summary":{"subtotal":75.00,"shipping_cost":4.95,"total_tax":6.19,"total_cost":56.14},"adjustments":[{"name":"New Customer Discount","amount":20},{"name":"$10 Off Coupon","amount":10}]}}}}')
+  in_data["recipient"]["id"]=recipient
+  userAddress=findAddress(recipient)
+  in_data['message']['attachment']['payload']['address']['city']=userAddress
+  in_data['message']['attachment']['payload']['elements']=myDicts[:]
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
-    data=json.dumps({
-      "recipient":{
-          "id":recipient
-        },
-        "message":{
-          "attachment":{
-            "type":"template",
-            "payload":{
-              "template_type":"receipt",
-              "recipient_name":"Stephane Crozatier",
-              "order_number":"12345678902",
-              "currency":"USD",
-              "payment_method":"Visa 2345",        
-              "order_url":"http://petersapparel.parseapp.com/order?order_id=123456",
-              "timestamp":"1428444852", 
-              "elements":[
-                {
-                  "title":"Classic White T-Shirt",
-                  "subtitle":"100% Soft and Luxurious Cotton",
-                  "quantity":2,
-                  "price":50,
-                  "currency":"USD",
-                  "image_url":"http://petersapparel.parseapp.com/img/whiteshirt.png"
-                },
-                {
-                  "title":"Clover Milk",
-                  "subtitle":"Whole Fat",
-                  "quantity":q,
-                  "price":2.50,
-                  "currency":"USD",
-                  "image_url":"http://www.clover.co.za/zpimages/thumb/450/550/data/products/milk_2_fresh_2l.png"
-                }
-              ],
-              "address":{
-                "street_1":"1 Hacker Way",
-                "street_2":"",
-                "city":"Menlo Park",
-                "postal_code":"94025",
-                "state":"CA",
-                "country":"US"
-              },
-              "summary":{
-                "subtotal":75.00,
-                "shipping_cost":4.95,
-                "total_tax":6.19,
-                "total_cost":56.14
-              },
-              "adjustments":[
-                {
-                  "name":"New Customer Discount",
-                  "amount":20
-                },
-                {
-                  "name":"$10 Off Coupon",
-                  "amount":10
-                }
-          ]
-        }
-      }
-    }
-  }),
-    headers={'Content-type': 'application/json'})
+    json=in_data)
+
   if r.status_code != requests.codes.ok:
     print r.text
 

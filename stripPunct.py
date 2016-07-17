@@ -1,4 +1,4 @@
-def stripPunct(myList):
+def noPunct(myList):
 	punct = set(string.punctuation)
 	x = 0
 	for item in myList[x][0]:

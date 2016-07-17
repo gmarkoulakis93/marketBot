@@ -1,4 +1,4 @@
-def createOrder(tuples, inventory, order):
+def forReceipt(tuples, inventory, order):
 	x = 0
 	while x < len(tuples):
 		for thing in inventory:
