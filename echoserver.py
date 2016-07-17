@@ -80,9 +80,10 @@ def handle_messages():
         tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
         noPunct(tuplesL)
         forReceipt(tuplesL, menu_items, order)
+        myDicts=[]
         for pair in order:
           myDicts.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
-        send_receipt(PAT, sender, message)
+        send_receipt(PAT, sender, message, myDicts)
         send_message(PAT, sender, message)
       else:
         send_message(PAT, sender, message)
@@ -147,14 +148,55 @@ def send_message(token, recipient, text):
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
-def send_receipt(token, recipient, text):
+def send_receipt(token, recipient, text, myDicts):
   """Send the message text to recipient with id recipient.
   """
-  in_data=json.loads('{"recipient":{"id":"recipient"},"message":{"attachment":{"type":"template","payload":{"template_type":"receipt","recipient_name":"Stephane Crozatier","order_number":"12345678902","currency":"USD","payment_method":"Visa 2345",        "order_url":"http://petersapparel.parseapp.com/order?order_id=123456","timestamp":"1428444852", "elements":[],"address":{"street_1":"1 Hacker Way","street_2":"","city":"San Francisco","postal_code":"94025","state":"CA","country":"US"},"summary":{"subtotal":75.00,"shipping_cost":4.95,"total_tax":6.19,"total_cost":56.14},"adjustments":[{"name":"New Customer Discount","amount":20},{"name":"$10 Off Coupon","amount":10}]}}}}')
-  in_data["recipient"]["id"]=recipient
+  in_data={
+    "message": {
+      "attachment": {
+        "type": "template", 
+        "payload": {
+          "elements": myDicts, 
+          "payment_method": "Visa 2345", 
+          "timestamp": "1428444852", 
+          "adjustments": [
+            {
+              "amount": 20, 
+              "name": "New Customer Discount"
+            }, 
+            {
+              "amount": 10, 
+              "name": "$10 Off Coupon"
+            }
+          ], 
+          "recipient_name": "Stephane Crozatier", 
+          "currency": "USD", 
+          "address": {
+            "city": "San Francisco", 
+            "country": "US", 
+            "state": "CA", 
+            "postal_code": "94025", 
+            "street_1": "1 Hacker Way", 
+            "street_2": ""
+          }, 
+          "order_url": "http://petersapparel.parseapp.com/order?order_id=123456", 
+          "summary": {
+            "total_cost": 56.14, 
+            "total_tax": 6.19, 
+            "subtotal": 75.0, 
+            "shipping_cost": 4.95
+          }, 
+          "template_type": "receipt", 
+          "order_number": "12345678902"
+        }
+      }
+    }, 
+    "recipient": {
+      "id": recipient
+    }
+  }
   userAddress=findAddress(recipient)
   in_data['message']['attachment']['payload']['address']['city']=userAddress
-  in_data['message']['attachment']['payload']['elements']=myDicts[:]
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     json=in_data)
