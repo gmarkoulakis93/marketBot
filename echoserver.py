@@ -6,6 +6,13 @@ from stripPunct import noPunct
 from createOrder import forReceipt
 import csv
 #ugh
+#ugh
+#ugh
+#ugh
+#ugh
+#ugh
+#ugh
+
 app = Flask(__name__)
 
 # This needs to be filled with the Page Access Token that will be provided
@@ -87,36 +94,6 @@ def handle_messages():
       else:
         send_message(PAT, sender, message)
   return "ok"
-
-def titleDict(food):
-  return {
-    "milk":"Clover Milk Non-Fat",
-    "bread":"Semi-Freddis Ciabatta",
-    "beer":"6-pack of Ballast Point",
-    "cheese":"Tillamook Cheddar",
-  }.get(food,"Hmm, not sure what happened. Try again?")
-
-def subtitle(food):
-  return {
-    "milk":"One Gallon",
-    "beer":"Rated number one on Beer Advocate",
-    "bread":" ",
-  }.get(food, " ")
-
-def pricing(food):
-  return {
-    "milk":6,
-    "bread":10,
-    "beer":13,
-    "cheese":4,
-  }.get(food, "We'll need to check on that")
-
-def pic(food):
-  return {
-    "milk":"http://www.clover.co.za/zpimages/thumb/450/550/data/products/milk_2_fresh_2l.png",
-    "bread":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
-    "beer":"http://www.southernspirits.com/wp-content/uploads/2016/02/ballast-point.jpg",
-  }.get(food, " ")
 
 def messageDict(stuff):
   #defines what responses we will give to different text inputs
