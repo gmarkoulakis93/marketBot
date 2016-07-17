@@ -5,13 +5,6 @@ from csvRead import findAddress
 from stripPunct import noPunct
 from createOrder import forReceipt
 import csv
-#ugh
-#ugh
-#ugh
-#ugh
-#ugh
-#ugh
-#ugh
 
 app = Flask(__name__)
 
@@ -21,7 +14,7 @@ PAT = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKnq5T32wVjqZA
 
 menu_items = ["bread", "beer", "milk", "cheese", "steak"]
 
-myDict = {}
+myDicts = []
 
 def titleDict(food):
   return {
@@ -36,7 +29,7 @@ def subtitle(food):
     "milk":"One Gallon",
     "beer":"Rated number one on Beer Advocate",
     "bread":"text",
-  }.get(food, " ")
+  }.get(food, "Bla")
 
 def pricing(food):
   return {
@@ -51,7 +44,7 @@ def pic(food):
     "milk":"http://www.clover.co.za/zpimages/thumb/450/550/data/products/milk_2_fresh_2l.png",
     "bread":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
     "beer":"http://www.southernspirits.com/wp-content/uploads/2016/02/ballast-point.jpg",
-  }.get(food, " ")
+  }.get(food, "N/A")
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -77,16 +70,16 @@ def handle_messages():
       send_receipt(PAT, sender, message)
     else:
       if "I want" in message:
+        print ("Receipt should send")
         message.replace("one","1")
-        #message.replace("a","1")
+        message.replace("a","1")
         #message.split(' ')
-        order = []
+        order    = []
         myList   = message.split(' ')
-        n = 2
+        n        = 2
         tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
         noPunct(tuplesL)
         forReceipt(tuplesL, menu_items, order)
-        myDicts = []
         for pair in order:
           myDicts.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
         send_receipt(PAT, sender, message)
@@ -116,19 +109,6 @@ def messaging_events(payload):
       yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
     else:
       yield event["sender"]["id"], "I can't echo this"
-  #for event in messaging_events:
-  #  if "message" in event and "text" in event["message"]:
-  #    yield event["sender"]["id"], messageDict(event["message"]["text"]).encode('unicode_escape')
-    #elif "message" in event and "attachment" in event["message"]:
-    #  yield event["sender"]["id"], event["url"]:"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
-      #if event["message"]["text"] == "Sup":
-        #yield event["sender"]["id"], event["type"]:"image" and event["url"]:"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg"
-       # yield event["sender"]["id"], "Figure out images later".encode('unicode_escape')
-      #else:
-      #yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
-       # yield event["sender"]["id"], "Argh".encode('unicode_escape')
-#    else:
-#      yield event["sender"]["id"], "I can't echo this"
 
 def send_image(token, recipient, text):
   """Send the message text to recipient with id recipient.
@@ -171,15 +151,14 @@ def send_receipt(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
   in_data=json.loads('{"recipient":{"id":"recipient"},"message":{"attachment":{"type":"template","payload":{"template_type":"receipt","recipient_name":"Stephane Crozatier","order_number":"12345678902","currency":"USD","payment_method":"Visa 2345",        "order_url":"http://petersapparel.parseapp.com/order?order_id=123456","timestamp":"1428444852", "elements":[],"address":{"street_1":"1 Hacker Way","street_2":"","city":"San Francisco","postal_code":"94025","state":"CA","country":"US"},"summary":{"subtotal":75.00,"shipping_cost":4.95,"total_tax":6.19,"total_cost":56.14},"adjustments":[{"name":"New Customer Discount","amount":20},{"name":"$10 Off Coupon","amount":10}]}}}}')
-  #in_data['message']['attachment']['payload']["elements"][0]["quantity"]=q
   in_data["recipient"]["id"]=recipient
   userAddress=findAddress(recipient)
   in_data['message']['attachment']['payload']['address']['city']=userAddress
   in_data['message']['attachment']['payload']['elements']=myDicts[:]
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
-    data=json.dumps(in_data),
-    headers={'Content-type': 'application/json'})
+    json=in_data)
+
   if r.status_code != requests.codes.ok:
     print r.text
 
