@@ -35,7 +35,7 @@ def subtitle(food):
   return {
     "milk":"One Gallon",
     "beer":"Rated number one on Beer Advocate",
-    "bread":" ",
+    "bread":"text",
   }.get(food, " ")
 
 def pricing(food):
@@ -86,9 +86,9 @@ def handle_messages():
         tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
         noPunct(tuplesL)
         forReceipt(tuplesL, menu_items, order)
-        for pair in tuplesL:
-          global myDict
-          myDict = {"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])}
+        myDicts = []
+        for pair in order:
+          myDicts.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
         send_receipt(PAT, sender, message)
         send_message(PAT, sender, message)
       else:
@@ -175,7 +175,7 @@ def send_receipt(token, recipient, text):
   in_data["recipient"]["id"]=recipient
   userAddress=findAddress(recipient)
   in_data['message']['attachment']['payload']['address']['city']=userAddress
-  in_data['message']['attachment']['payload']['elements'].append(myDict)
+  in_data['message']['attachment']['payload']['elements']=myDicts[:]
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     data=json.dumps(in_data),
