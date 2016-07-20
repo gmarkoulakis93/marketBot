@@ -172,8 +172,12 @@ def send_receipt(token, recipient, text, myDicts):
           "adjustments": [
             {
               "amount": 0, 
-              "name": "Bla"
+              "name": "None"
             }, 
+            {
+              "amount": 0, 
+              "name": "None"
+            }
           ], 
           "recipient_name": recip_name, 
           "currency": "USD", 
