@@ -1,12 +1,14 @@
 from flask import Flask, request
 import json
 import requests
-from csvRead import findAddress
+import csvRead
 from stripPunct import noPunct
 from createOrder import forReceipt
 import csv
 
 app = Flask(__name__)
+
+'''rename variables (don't use myDicts)'''
 
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
@@ -151,6 +153,13 @@ def send_message(token, recipient, text):
 def send_receipt(token, recipient, text, myDicts):
   """Send the message text to recipient with id recipient.
   """
+  userCity   = findCity(recipient)
+  userStreet = findStreet(recipient)
+  userPostal = findPostal(recipient)
+  userFName  = findFName(recipient)
+  userLName  = findLName(recipient)
+  recip_name = userFName + ' ' + userLName
+
   in_data={
     "message": {
       "attachment": {
@@ -169,14 +178,14 @@ def send_receipt(token, recipient, text, myDicts):
               "name": "$10 Off Coupon"
             }
           ], 
-          "recipient_name": "Stephane Crozatier", 
+          "recipient_name": recip_name, 
           "currency": "USD", 
           "address": {
-            "city": "San Francisco", 
+            "city": userCity, 
             "country": "US", 
             "state": "CA", 
-            "postal_code": "94025", 
-            "street_1": "1 Hacker Way", 
+            "postal_code": userPostal, 
+            "street_1": userStreet, 
             "street_2": ""
           }, 
           "order_url": "http://petersapparel.parseapp.com/order?order_id=123456", 
@@ -195,8 +204,8 @@ def send_receipt(token, recipient, text, myDicts):
       "id": recipient
     }
   }
-  userAddress=findAddress(recipient)
-  in_data['message']['attachment']['payload']['address']['city']=userAddress
+  
+  #in_data['message']['attachment']['payload']['address']['city']=userAddress
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     json=in_data)
