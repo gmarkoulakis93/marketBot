@@ -16,7 +16,7 @@ PAT = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKnq5T32wVjqZA
 
 menu_items = ["bread", "beer", "milk", "cheese", "steak"]
 
-myDicts = []
+#myDicts = []
 
 def titleDict(food):
   return {
