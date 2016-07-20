@@ -168,7 +168,7 @@ def send_receipt(token, recipient, text, myDicts):
       k = keys[n]
       total[k] = d['price']
       n = n+1
-  cost = sum(total.values())
+  cost       = sum(total.values())
   tax        = TAX_RATE * cost
   total      = cost + tax
 
