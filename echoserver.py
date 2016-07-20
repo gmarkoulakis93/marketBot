@@ -153,6 +153,7 @@ def send_message(token, recipient, text):
 def send_receipt(token, recipient, text, myDicts):
   """Send the message text to recipient with id recipient.
   """
+  TAX_RATE   = .05
   userCity   = findCity(recipient)
   userStreet = findStreet(recipient)
   userPostal = findPostal(recipient)
@@ -160,6 +161,9 @@ def send_receipt(token, recipient, text, myDicts):
   userLName  = findLName(recipient)
   userCard   = findCardShort(recipient)
   recip_name = userFName + ' ' + userLName
+  cost       = sum(myDicts.values())
+  tax        = TAX_RATE * cost
+  total      = cost + tax
 
   in_data={
     "message": {
@@ -172,11 +176,11 @@ def send_receipt(token, recipient, text, myDicts):
           "adjustments": [
             {
               "amount": 1, 
-              "name": "None"
+              "name": "FixThisLater"
             }, 
             {
               "amount": 1, 
-              "name": "None"
+              "name": "FixThisLater"
             }
           ], 
           "recipient_name": recip_name, 
@@ -191,10 +195,10 @@ def send_receipt(token, recipient, text, myDicts):
           }, 
           "order_url": "http://petersapparel.parseapp.com/order?order_id=123456", 
           "summary": {
-            "total_cost": 56.14, 
-            "total_tax": 6.19, 
-            "subtotal": 75.0, 
-            "shipping_cost": 4.95
+            "total_cost": cost, 
+            "total_tax": tax, 
+            "subtotal": total, 
+            "shipping_cost": 0
           }, 
           "template_type": "receipt", 
           "order_number": "12345678902"
