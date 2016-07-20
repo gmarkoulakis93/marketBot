@@ -161,7 +161,14 @@ def send_receipt(token, recipient, text, myDicts):
   userLName  = findLName(recipient)
   userCard   = findCardShort(recipient)
   recip_name = userFName + ' ' + userLName
-  cost       = sum(myDicts[0].values()) + sum(myDicts[1].values())
+  keys       = ['a','b','c','d', 'e', 'f']
+  total      = {}
+  n=0
+  for d in myDicts:
+      k = keys[n]
+      total[k] = d['price']
+      n = n+1
+  cost = sum(total.values())
   tax        = TAX_RATE * cost
   total      = cost + tax
 
