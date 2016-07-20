@@ -1,7 +1,7 @@
 from flask import Flask, request
 import json
 import requests
-import csvRead
+from csvRead import findCity, findStreet, findPostal, findFName, findLName
 from stripPunct import noPunct
 from createOrder import forReceipt
 import csv
