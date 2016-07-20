@@ -1,7 +1,7 @@
 from flask import Flask, request
 import json
 import requests
-from csvRead import findCity, findStreet, findPostal, findFName, findLName
+from csvRead import findCity, findStreet, findPostal, findFName, findLName, findCardShort
 from stripPunct import noPunct
 from createOrder import forReceipt
 import csv
@@ -158,6 +158,7 @@ def send_receipt(token, recipient, text, myDicts):
   userPostal = findPostal(recipient)
   userFName  = findFName(recipient)
   userLName  = findLName(recipient)
+  userCard   = findCardShort(recipient)
   recip_name = userFName + ' ' + userLName
 
   in_data={
@@ -166,16 +167,16 @@ def send_receipt(token, recipient, text, myDicts):
         "type": "template", 
         "payload": {
           "elements": myDicts, 
-          "payment_method": "Visa 2345", 
+          "payment_method": userCard,
           "timestamp": "1428444852", 
           "adjustments": [
             {
-              "amount": 20, 
-              "name": "New Customer Discount"
+              "amount": 0, 
+              "name": ""
             }, 
             {
-              "amount": 10, 
-              "name": "$10 Off Coupon"
+              "amount": 0, 
+              "name": ""
             }
           ], 
           "recipient_name": recip_name, 

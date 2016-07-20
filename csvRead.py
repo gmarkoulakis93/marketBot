@@ -34,3 +34,10 @@ def findLName(recipient):
 			if row['m_id']==recipient:
 				return row['lname']
 			pass
+def findCardShort(recipient):
+	with open('sender_file.csv') as csvfile:
+		reader = csv.DictReader(csvfile)
+		for row in reader:
+			if row['m_id']==recipient:
+				return row['card_short']
+			pass
