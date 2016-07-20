@@ -171,11 +171,11 @@ def send_receipt(token, recipient, text, myDicts):
           "timestamp": "1428444852", 
           "adjustments": [
             {
-              "amount": 0, 
+              "amount": 1, 
               "name": "None"
             }, 
             {
-              "amount": 0, 
+              "amount": 1, 
               "name": "None"
             }
           ], 
