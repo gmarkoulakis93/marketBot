@@ -202,9 +202,9 @@ def send_receipt(token, recipient, text, myDicts):
           }, 
           "order_url": "http://petersapparel.parseapp.com/order?order_id=123456", 
           "summary": {
-            "total_cost": cost, 
+            "total_cost": total, 
             "total_tax": tax, 
-            "subtotal": total, 
+            "subtotal": cost, 
             "shipping_cost": 0
           }, 
           "template_type": "receipt", 
