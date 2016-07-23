@@ -8,15 +8,13 @@ import csv
 
 app = Flask(__name__)
 
-'''rename variables (don't use myDicts)'''
+'''rename variables (don't use something like myDicts)'''
 
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
 PAT = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKnq5T32wVjqZApG6bKOFujVdZAr2DX31SXTKqZC2ZCZAf8NBOHGqrtGwpGZB9sOWjar6n3XifD6G7ywuMrMNbH75dGpw9oYadgdtqVPCrhIU29p2pzwZDZD'
 
 menu_items = ["bread", "beer", "milk", "cheese", "steak"]
-
-#myDicts = []
 
 def titleDict(food):
   return {
@@ -82,10 +80,10 @@ def handle_messages():
         tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
         noPunct(tuplesL)
         forReceipt(tuplesL, menu_items, order)
-        myDicts=[]
+        itemInfoDicts=[]
         for pair in order:
-          myDicts.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
-        send_receipt(PAT, sender, message, myDicts)
+          itemInfoDicts.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
+        send_receipt(PAT, sender, message, itemInfoDicts)
         send_message(PAT, sender, message)
       else:
         send_message(PAT, sender, message)
@@ -150,7 +148,7 @@ def send_message(token, recipient, text):
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
-def send_receipt(token, recipient, text, myDicts):
+def send_receipt(token, recipient, text, itemInfoDicts):
   """Send the message text to recipient with id recipient.
   """
   TAX_RATE   = .05
@@ -161,14 +159,21 @@ def send_receipt(token, recipient, text, myDicts):
   userLName  = findLName(recipient)
   userCard   = findCardShort(recipient)
   recip_name = userFName + ' ' + userLName
-  keys       = ['a','b','c','d', 'e', 'f']
-  total      = {}
-  n=0
-  for d in myDicts:
-      k = keys[n]
-      total[k] = d['price']
-      n = n+1
-  cost       = sum(total.values())
+  #keys       = ['a','b','c','d', 'e', 'f']
+  #total      = {}
+  #n=0
+  #for d in itemInfoDicts:
+  #    k = keys[n]
+  #    total[k] = d['price']
+  #    n = n+1
+  #cost       = sum(total.values())
+  prices     = {}
+  for d in itemInfoDicts:
+    prices[d['item']] = d['price']
+  quantities = {}
+  for d in itemInfoDicts:
+    prices[d['item']] = d['quantity']
+  cost       = sum(prices[k]*int(quantities[k]) for k in prices)
   tax        = TAX_RATE * cost
   total      = cost + tax
 
@@ -177,7 +182,7 @@ def send_receipt(token, recipient, text, myDicts):
       "attachment": {
         "type": "template", 
         "payload": {
-          "elements": myDicts, 
+          "elements": itemInfoDicts, 
           "payment_method": userCard,
           "timestamp": "1428444852", 
           "adjustments": [
