@@ -170,9 +170,11 @@ def send_receipt(token, recipient, text, itemInfoDicts):
   prices     = {}
   for d in itemInfoDicts:
     prices[d['title']] = d['price']
+  print(prices)
   quantities = {}
   for d in itemInfoDicts:
     prices[d['title']] = d['quantity']
+  print(quantities)
   cost       = sum(prices[k]*int(quantities[k]) for k in prices)
   tax        = TAX_RATE * cost
   total      = cost + tax
