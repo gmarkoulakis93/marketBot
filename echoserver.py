@@ -81,8 +81,9 @@ def handle_messages():
       itemInfoDicts=[]
       for pair in order:
         itemInfoDicts.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
+      pre_receipt(PAT, sender, message)
       send_receipt(PAT, sender, message, itemInfoDicts)
-      send_message(PAT, sender, message)
+      post_receipt(PAT, sender, message)
     else:
       send_message(PAT, sender, message)
   return "ok"
@@ -90,10 +91,10 @@ def handle_messages():
 #For our send_message function, this is our rules set
 def messageDict(stuff):
   return {
-    "Hi":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order?",
-    "Hey":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order?",
-    "Sup":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order?",
-    "y":"Great. What would you like?",
+    "Hi":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
+    "Hey":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
+    "Sup":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
+    "Y":"Great! Check out all the products we offer here (hyperlink or button?)",
     "Sup?":"I'm well. How are you?",
     "Avy":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
   }.get(stuff, "Is this what you'd like? If so, enter 'Y'")
@@ -149,6 +150,37 @@ def send_message(token, recipient, text):
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
+
+def pre_receipt(token, recipient, text):
+  """Send the message right before receipt template
+  """
+
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient": {"id": recipient},
+      "message": {"text": "Great choices. Can you review this receipt and ensure it's what you asked for and also check if the address is right"}
+}),
+
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
+
+def post_receipt(token, recipient, text):
+  """Send the ask for confirmation
+  """
+
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient": {"id": recipient},
+      "message": {"text": "How about you give me a 'Looks good' if this is right?"}
+}),
+
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
+
 
 #our receipt function that takes the itemInfoDicts created above to extract all the data we need
 #as you can see, the majority of the JSON elements are variable -- varies with user and input message
