@@ -8,14 +8,15 @@ import csv
 
 app = Flask(__name__)
 
-'''rename variables (don't use something like myDicts)'''
+#rename variables (don't use something like myDicts)
 
-# This needs to be filled with the Page Access Token that will be provided
-# by the Facebook App that will be created.
+# This is the page access token needed to talk to the Messenger API
 PAT = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKnq5T32wVjqZApG6bKOFujVdZAr2DX31SXTKqZC2ZCZAf8NBOHGqrtGwpGZB9sOWjar6n3XifD6G7ywuMrMNbH75dGpw9oYadgdtqVPCrhIU29p2pzwZDZD'
 
+#All the items that the user could order
 menu_items = ["bread", "beer", "milk", "cheese", "steak"]
 
+#These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
   return {
     "milk":"Clover Milk Non-Fat",
@@ -46,6 +47,7 @@ def pic(food):
     "beer":"http://www.southernspirits.com/wp-content/uploads/2016/02/ballast-point.jpg",
   }.get(food, "N/A")
 
+#function that enables access to the Messenger API
 @app.route('/', methods=['GET'])
 def handle_verification():
   print "Handling Verification."
@@ -56,6 +58,8 @@ def handle_verification():
     print "Verification failed!"
     return 'Error, wrong validation token'
 
+#function that posts to FB server
+#we also route what type of message we send depending on what the payload is
 @app.route('/', methods=['POST'])
 def handle_messages():
   print "Handling Messages"
@@ -63,42 +67,38 @@ def handle_messages():
   print payload
   for sender, message in messaging_events(payload):
     print "Incoming from %s: %s" % (sender, message)
-    #if message == "Avy":
-    #  send_image(PAT, sender, message)
-    #else:
-    if message == "Receipt":
-      send_receipt(PAT, sender, message)
+    if "I want" in message:
+      print ("Receipt should send")
+      message.replace("one","1")
+      message.replace("a","1")
+      #message.split(' ')
+      order    = []
+      myList   = message.split(' ')
+      n        = 2
+      tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
+      noPunct(tuplesL)
+      forReceipt(tuplesL, menu_items, order)
+      itemInfoDicts=[]
+      for pair in order:
+        itemInfoDicts.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
+      send_receipt(PAT, sender, message, itemInfoDicts)
+      send_message(PAT, sender, message)
     else:
-      if "I want" in message:
-        print ("Receipt should send")
-        message.replace("one","1")
-        message.replace("a","1")
-        #message.split(' ')
-        order    = []
-        myList   = message.split(' ')
-        n        = 2
-        tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
-        noPunct(tuplesL)
-        forReceipt(tuplesL, menu_items, order)
-        itemInfoDicts=[]
-        for pair in order:
-          itemInfoDicts.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
-        send_receipt(PAT, sender, message, itemInfoDicts)
-        send_message(PAT, sender, message)
-      else:
-        send_message(PAT, sender, message)
+      send_message(PAT, sender, message)
   return "ok"
 
+#For our send_message function, this is our rules set
 def messageDict(stuff):
-  #defines what responses we will give to different text inputs
   return {
+    "Hi":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order?",
+    "Hey":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order?",
     "Sup":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order?",
     "y":"Great. What would you like?",
     "Sup?":"I'm well. How are you?",
-    "3 loaves of bread, a 6 pack of beer, and ground beef":"Sounds great, please review this receipt. Say 'OK' if this is the correct order",
     "Avy":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
   }.get(stuff, "Is this what you'd like? If so, enter 'Y'")
 
+#Now, break down the message payload and extract message and ID
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
   provided payload.
@@ -111,6 +111,7 @@ def messaging_events(payload):
     else:
       yield event["sender"]["id"], "I can't echo this"
 
+#play around with the send_image functionality...not used
 def send_image(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
@@ -133,7 +134,7 @@ def send_image(token, recipient, text):
   if r.status_code != requests.codes.ok:
     print r.text
 
-
+#main engine for text conversation
 def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
@@ -148,6 +149,9 @@ def send_message(token, recipient, text):
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
+
+#our receipt function that takes the itemInfoDicts created above to extract all the data we need
+#as you can see, the majority of the JSON elements are variable -- varies with user and input message
 def send_receipt(token, recipient, text, itemInfoDicts):
   """Send the message text to recipient with id recipient.
   """
@@ -159,14 +163,6 @@ def send_receipt(token, recipient, text, itemInfoDicts):
   userLName  = findLName(recipient)
   userCard   = findCardShort(recipient)
   recip_name = userFName + ' ' + userLName
-  #keys       = ['a','b','c','d', 'e', 'f']
-  #total      = {}
-  #n=0
-  #for d in itemInfoDicts:
-  #    k = keys[n]
-  #    total[k] = d['price']
-  #    n = n+1
-  #cost       = sum(total.values())
   prices     = {}
   for d in itemInfoDicts:
     prices[d['title']] = d['price']
@@ -188,11 +184,11 @@ def send_receipt(token, recipient, text, itemInfoDicts):
           "adjustments": [
             {
               "amount": 1, 
-              "name": "FixThisLater"
+              "name": "not in calculation"
             }, 
             {
               "amount": 1, 
-              "name": "FixThisLater"
+              "name": "not in calculation"
             }
           ], 
           "recipient_name": recip_name, 
@@ -222,7 +218,6 @@ def send_receipt(token, recipient, text, itemInfoDicts):
     }
   }
   
-  #in_data['message']['attachment']['payload']['address']['city']=userAddress
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     json=in_data)
