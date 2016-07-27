@@ -92,8 +92,12 @@ def handle_messages():
 def messageDict(stuff):
   return {
     "Hi":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
+    "Hi!":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
     "Hey":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
+    "Hey!":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
     "Sup":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
+    "Sup!":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
+    "What's up?":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
     "Y":"Great! Check out all the products we offer here (hyperlink or button?)",
     "Sup?":"I'm well. How are you?",
     "Avy":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
@@ -140,13 +144,11 @@ def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
 
-  messageToSend = messageDict(noPunct(text))
-
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     data=json.dumps({
       "recipient": {"id": recipient},
-      "message": {"text": messageToSend.decode('unicode_escape')}
+      "message": {"text": messageDict(text.decode('unicode_escape'))}
 }),
 
     headers={'Content-type': 'application/json'})
