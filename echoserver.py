@@ -72,6 +72,7 @@ def handle_messages():
   print payload
   for sender, message in messaging_events(payload):
     print "Incoming from %s: %s" % (sender, message)
+    cleanDateObject = ''
     if "I want" in message:
       print ("Receipt should send")
       message.replace("one","1")
@@ -89,6 +90,17 @@ def handle_messages():
       pre_receipt(PAT, sender, message)
       send_receipt(PAT, sender, message, itemInfoDicts)
       post_receipt(PAT, sender, message)
+    else if "delivery date" in message.lower():
+      delimitMessage = message.split(" ")
+      attemptedDate  = delimitMessage[-1].strip()
+      try:
+        deliveryDateObject = datetime.datetime.strptime(attemptedDate, "%m/%d")
+        cleanDateObject    = deliveryDateObject.strftime("%m-%d")
+        date_confirm(PAT, sender, message, cleanDateObject)
+      except Exception:
+        bad_date(PAT, sender, message)
+    else if "that date looks great" in message.lower():
+      available_time_windows(PAT, sender, message, cleanDateObject)
     else:
       send_message(PAT, sender, message)
   return "ok"
@@ -105,7 +117,7 @@ def messageDict(stuff):
     "What's up?":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
     "Y":"Great! Check out all the products we offer here (hyperlink or button?). If you know what you want, place your order saying 'I want...'",
     "Sup?":"I'm well. How are you?",
-    "Looks good":"What day is best for delivery? Send me the date in m/dd format (remember that the soonest we can deliver is %s" % tomorrow,
+    "Looks good":"What day is best for delivery? Send me the date like this: 'Delivery date: [date in m/dd format]' (remember that the soonest we can deliver is %s)" % tomorrow,
     "Avy":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
   }.get(stuff, "Is this what you'd like? If so, enter 'Y'")
 
@@ -191,6 +203,50 @@ def post_receipt(token, recipient, text):
   if r.status_code != requests.codes.ok:
     print r.text
 
+def date_confirm(token, recipient, text, date):
+  """Send the ask for confirmation
+  """
+
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient": {"id": recipient},
+      "message": {"text": "So delivery on %s? Reply with 'That date looks great' if it's right." % date}
+}),
+
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
+
+def bad_date(token, recipient, text):
+  """Send the ask for confirmation
+  """
+
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient": {"id": recipient},
+      "message": {"text": "That date doesn't seem to be valid. Try again? Remember to use 'Delivery date: [m/dd]' format!"}
+}),
+
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
+
+def available_time_windows(token, recipient, text, date):
+  """Send the ask for confirmation
+  """
+
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient": {"id": recipient},
+      "message": {"text": "Awesome. Here are the available time windows on %s" % date}
+}),
+
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
 
 #our receipt function that takes the itemInfoDicts created above to extract all the data we need
 #as you can see, the majority of the JSON elements are variable -- varies with user and input message
