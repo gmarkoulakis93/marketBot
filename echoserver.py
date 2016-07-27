@@ -144,7 +144,7 @@ def send_message(token, recipient, text):
     params={"access_token": token},
     data=json.dumps({
       "recipient": {"id": recipient},
-      "message": {"text": messageDict(text.decode('unicode_escape'))}
+      "message": {"text": messageDict(noPunct(text.decode('unicode_escape'))}
 }),
 
     headers={'Content-type': 'application/json'})
