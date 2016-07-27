@@ -140,11 +140,13 @@ def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
 
+  messageToSend = messageDict(noPunct(text))
+
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     data=json.dumps({
       "recipient": {"id": recipient},
-      "message": {"text": messageDict(noPunct(text.decode('unicode_escape')))}
+      "message": {"text": messageToSend.decode('unicode_escape')}
 }),
 
     headers={'Content-type': 'application/json'})
