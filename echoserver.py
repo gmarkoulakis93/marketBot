@@ -4,6 +4,7 @@ import requests
 from csvRead import findCity, findStreet, findPostal, findFName, findLName, findCardShort
 from stripPunct import noPunct
 from createOrder import forReceipt
+import datetime
 import csv
 
 app = Flask(__name__)
@@ -11,10 +12,14 @@ app = Flask(__name__)
 #rename variables (don't use something like myDicts)
 
 # This is the page access token needed to talk to the Messenger API
-PAT = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKnq5T32wVjqZApG6bKOFujVdZAr2DX31SXTKqZC2ZCZAf8NBOHGqrtGwpGZB9sOWjar6n3XifD6G7ywuMrMNbH75dGpw9oYadgdtqVPCrhIU29p2pzwZDZD'
+PAT            = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKnq5T32wVjqZApG6bKOFujVdZAr2DX31SXTKqZC2ZCZAf8NBOHGqrtGwpGZB9sOWjar6n3XifD6G7ywuMrMNbH75dGpw9oYadgdtqVPCrhIU29p2pzwZDZD'
 
 #All the items that the user could order
-menu_items = ["bread", "beer", "milk", "cheese", "steak"]
+menu_items     = ["bread", "beer", "milk", "cheese", "steak"]
+raw_time_today = datetime.datetime.now()
+today          = "%s/%s/%s" % (raw_time_today.month, raw_time_today.date, raw_time_today.year)
+tomorrow       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.date + 1, raw_time_today.year)
+
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -100,6 +105,7 @@ def messageDict(stuff):
     "What's up?":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
     "Y":"Great! Check out all the products we offer here (hyperlink or button?)",
     "Sup?":"I'm well. How are you?",
+    "Looks good":"What day is best for delivery? Send me the date in m/dd format (remember that the soonest we can deliver is %s" % tomorrow,
     "Avy":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
   }.get(stuff, "Is this what you'd like? If so, enter 'Y'")
 
