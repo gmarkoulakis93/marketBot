@@ -90,7 +90,7 @@ def handle_messages():
       pre_receipt(PAT, sender, message)
       send_receipt(PAT, sender, message, itemInfoDicts)
       post_receipt(PAT, sender, message)
-    else if "Delivery date" in message:
+    elif "Delivery date" in message:
       delimitMessage = message.split(" ")
       attemptedDate  = delimitMessage[-1].strip()
       try:
@@ -99,7 +99,7 @@ def handle_messages():
         date_confirm(PAT, sender, message, cleanDateObject)
       except Exception:
         bad_date(PAT, sender, message)
-    else if "That date looks great" in message:
+    elif "That date looks great" in message:
       available_time_windows(PAT, sender, message, cleanDateObject)
     else:
       send_message(PAT, sender, message)
