@@ -17,8 +17,8 @@ PAT            = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKn
 #All the items that the user could order
 menu_items     = ["bread", "beer", "milk", "cheese", "steak"]
 raw_time_today = datetime.datetime.now()
-today          = "%s/%s/%s" % (raw_time_today.month, raw_time_today.date, raw_time_today.year)
-tomorrow       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.date + 1, raw_time_today.year)
+today          = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day, raw_time_today.year)
+tomorrow       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 1, raw_time_today.year)
 
 
 #These dictionaries are used to populate the API requirements for the receipt template
