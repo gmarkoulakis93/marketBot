@@ -111,11 +111,13 @@ def handle_messages():
     #    bad_date(PAT, sender, message)
     elif message in dateList:
       deliveryDate = message
+      print (deliveryDate)
       available_times(PAT, sender, message)
     #  available_time_windows(PAT, sender, message, cleanDateObject)
     elif message in timeList:
       findTime     = message.split(':')
       deliveryTime = findTime[-1]
+      print (deliveryTime)
       wrapUpMessage2(PAT, sender, message, deliveryDate, deliveryTime)
     else:
       send_message(PAT, sender, message)
@@ -386,8 +388,7 @@ def wrapUpMessage2(token, recipient, text, date, time):
     params={"access_token": token},
     data=json.dumps({
       "recipient": {"id": recipient},
-      "message": {"text": "See you on %s between %s! Call us at \
-                   1(415)111-1111 if you need our help!" % (date,time)}
+      "message": {"text": "See you on %s between %s! Call us at 1(415)111-1111 if you need our help!" % (date,time)}
 }),
 
     headers={'Content-type': 'application/json'})
