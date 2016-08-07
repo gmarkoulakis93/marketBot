@@ -216,12 +216,12 @@ def post_receipt(token, recipient, text):
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"Yes",
+            "title":"Receipt Looks Good",
             "payload":"receipt_good"
           },
           {
             "content_type":"text",
-            "title":"No",
+            "title":"Hmm, not quite",
             "payload":"receipt_bad"
           }
         ]
