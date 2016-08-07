@@ -81,7 +81,9 @@ def handle_messages():
     cleanDateObject = ''
     deliveryDate    = ''
     deliveryTime    = ''
-    if "I want" in message:
+    if message == "I want a beer":
+      send_message(PAT, sender, message)
+    elif "I want" in message:
       print ("Receipt should send")
       message.replace("one","1")
       message.replace("a","1")
