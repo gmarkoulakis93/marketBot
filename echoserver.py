@@ -117,8 +117,8 @@ def messageDict(stuff):
     "What's up?":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
     "Y":"Great! Check out all the products we offer here (hyperlink or button?). If you know what you want, place your order saying 'I want...'",
     "Sup?":"I'm well. How are you?",
-    "Looks good":"What day is best for delivery? Send me the date like this: 'Delivery date: [date in m/dd format]' (remember that the soonest we can deliver is %s)" % tomorrow,
-    "Avy":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
+    "receipt_good":"What day is best for delivery? Send me the date like this: 'Delivery date: [date in m/dd format]' (remember that the soonest we can deliver is %s)" % tomorrow,
+    "Yes":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
   }.get(stuff, "Is this what you'd like? If so, enter 'Y'")
 
 #Now, break down the message payload and extract message and ID
