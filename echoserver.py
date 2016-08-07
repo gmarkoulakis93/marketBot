@@ -321,8 +321,8 @@ def bad_date(token, recipient, text):
     print r.text
 
 def available_times(token, recipient, text, date):
-"""leverage quick reply buttons to book a time window - In the future, this will have to query some other database
-  """
+#leverage quick reply buttons to book a time window 
+#In the future, this will have to query some other database
 
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
