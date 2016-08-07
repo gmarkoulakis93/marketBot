@@ -112,12 +112,14 @@ def handle_messages():
     elif message in dateList:
       deliveryDate = message
       print (deliveryDate)
-      available_times(PAT, sender, message)
+      available_times(PAT, sender, message, deliveryDate)
     #  available_time_windows(PAT, sender, message, cleanDateObject)
     elif message in timeList:
       findTime     = message.split(' ')
       deliveryTime = findTime[-1]
+      deliveryDate = findTime[0]
       print (deliveryTime)
+      print (deliveryDate)
       wrapUpMessage2(PAT, sender, message, deliveryDate, deliveryTime)
     else:
       send_message(PAT, sender, message)
@@ -331,7 +333,7 @@ def bad_date(token, recipient, text):
   if r.status_code != requests.codes.ok:
     print r.text
 
-def available_times(token, recipient, text):
+def available_times(token, recipient, text, date):
 #leverage quick reply buttons to book a time window 
 #In the future, this will have to query some other database
 
@@ -344,17 +346,17 @@ def available_times(token, recipient, text):
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"Time1: 3:00pm-4:00pm",
+            "title":"%s Time1: 3:00pm-4:00pm" % date,
             "payload":"time+1"
           },
           {
             "content_type":"text",
-            "title":"Time2: 4:00pm-5:00pm",
+            "title":"%s Time2: 4:00pm-5:00pm" % date,
             "payload":"time+2"
           },
           {
             "content_type":"text",
-            "title":"Time3: 5:00pm-6:00pm",
+            "title":"%s Time3: 5:00pm-6:00pm" % date,
             "payload":"time+3"
           }
         ]
