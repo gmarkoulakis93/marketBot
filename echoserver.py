@@ -94,7 +94,7 @@ def handle_messages():
       pre_receipt(PAT, sender, message)
       send_receipt(PAT, sender, message, itemInfoDicts)
       post_receipt(PAT, sender, message)
-    elif message == "Receipt Looks good":
+    elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
     elif "Delivery date" in message:
       delimitMessage = message.split(" ")
