@@ -25,12 +25,12 @@ threeAfter     = "%s/%s" % (raw_time_today.month, raw_time_today.day + 4)
 fourAfter      = "%s/%s" % (raw_time_today.month, raw_time_today.day + 5)
 fiveAfter      = "%s/%s" % (raw_time_today.month, raw_time_today.day + 6)
 dateList       = [tomorrow, oneAfter, twoAfter, threeAfter, fourAfter, fiveAfter]
-timeList       = ["%s Time1: 3:00pm-4:00pm" % tomorrow,"%s Time2: 4:00pm-5:00pm" % tomorrow, "%s Time3: 5:00pm-6:00pm" % tomorrow,
-                  "%s Time1: 3:00pm-4:00pm" % oneAfter,"%s Time2: 4:00pm-5:00pm" % oneAfter,"%s Time3: 5:00pm-6:00pm" % oneAfter,
-                  "%s Time1: 3:00pm-4:00pm" % twoAfter,"%s Time2: 4:00pm-5:00pm" % twoAfter,"%s Time3: 5:00pm-6:00pm" % twoAfter,
-                  "%s Time1: 3:00pm-4:00pm" % threeAfter,"%s Time2: 4:00pm-5:00pm" % threeAfter,"%s Time3: 5:00pm-6:00pm" % threeAfter,
-                  "%s Time1: 3:00pm-4:00pm" % fourAfter,"%s Time2: 4:00pm-5:00pm" % fourAfter,"%s Time3: 5:00pm-6:00pm" % fourAfter,
-                  "%s Time1: 3:00pm-4:00pm" % fiveAfter,"%s Time2: 4:00pm-5:00pm" % fiveAfter,"%s Time3: 5:00pm-6:00pm" % fiveAfter]
+timeList       = ["%s Time1: 3-4pm" % tomorrow,"%s Time2: 4-5pm" % tomorrow, "%s Time3: 5-6pm" % tomorrow,
+                  "%s Time1: 3-4pm" % oneAfter,"%s Time2: 4-5pm" % oneAfter, "%s Time3: 5-6pm" % oneAfter,
+                  "%s Time1: 3-4pm" % twoAfter,"%s Time2: 4-5pm" % twoAfter, "%s Time3: 5-6pm" % twoAfter,
+                  "%s Time1: 3-4pm" % threeAfter,"%s Time2: 4-5pm" % threeAfter, "%s Time3: 5-6pm" % threeAfter,
+                  "%s Time1: 3-4pm" % fourAfter,"%s Time2: 4-5pm" % fourAfter, "%s Time3: 5-6pm" % fourAfter,
+                  "%s Time1: 3-4pm" % fiveAfter,"%s Time2: 4-5pm" % fiveAfter, "%s Time3: 5-6pm" % fiveAfter]
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
