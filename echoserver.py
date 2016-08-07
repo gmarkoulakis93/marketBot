@@ -18,14 +18,19 @@ PAT            = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKn
 menu_items     = ["bread", "beer", "milk", "cheese", "steak"]
 raw_time_today = datetime.datetime.now()
 today          = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day, raw_time_today.year)
-tomorrow       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 1, raw_time_today.year)
-oneAfter       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 2, raw_time_today.year)
-twoAfter       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 3, raw_time_today.year)
-threeAfter     = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 4, raw_time_today.year)
-fourAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 5, raw_time_today.year) 
-fiveAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 6, raw_time_today.year)
+tomorrow       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 1)
+oneAfter       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 2)
+twoAfter       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 3)
+threeAfter     = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 4)
+fourAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 5)
+fiveAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 6)
 dateList       = [tomorrow, oneAfter, twoAfter, threeAfter, fourAfter, fiveAfter]
-timeList       = ["Time1: 3:00pm-4:00pm","Time2: 4:00pm-5:00pm","Time3: 5:00pm-6:00pm"]
+timeList       = ["%s Time1: 3:00pm-4:00pm" % tomorrow,"%s Time2: 4:00pm-5:00pm" % tomorrow, "%s Time3: 5:00pm-6:00pm" % tomorrow,
+                  "%s Time1: 3:00pm-4:00pm" % oneAfter,"%s Time2: 4:00pm-5:00pm" % oneAfter,"%s Time3: 5:00pm-6:00pm" % oneAfter,
+                  "%s Time1: 3:00pm-4:00pm" % twoAfter,"%s Time2: 4:00pm-5:00pm" % twoAfter,"%s Time3: 5:00pm-6:00pm" % twoAfter,
+                  "%s Time1: 3:00pm-4:00pm" % threeAfter,"%s Time2: 4:00pm-5:00pm" % threeAfter,"%s Time3: 5:00pm-6:00pm" % threeAfter,
+                  "%s Time1: 3:00pm-4:00pm" % fourAfter,"%s Time2: 4:00pm-5:00pm" % fourAfter,"%s Time3: 5:00pm-6:00pm" % fourAfter,
+                  "%s Time1: 3:00pm-4:00pm" % fiveAfter,"%s Time2: 4:00pm-5:00pm" % fiveAfter,"%s Time3: 5:00pm-6:00pm" % fiveAfter]
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -119,7 +124,6 @@ def handle_messages():
       deliveryTime = findTime[-1]
       deliveryDate = findTime[0]
       print (deliveryTime)
-      print (deliveryDate)
       wrapUpMessage2(PAT, sender, message, deliveryDate, deliveryTime)
     else:
       send_message(PAT, sender, message)
@@ -346,17 +350,17 @@ def available_times(token, recipient, text, date):
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"%s Time1: 3:00pm-4:00pm" % date,
+            "title":"Time1: 3:00pm-4:00pm",
             "payload":"time+1"
           },
           {
             "content_type":"text",
-            "title":"%s Time2: 4:00pm-5:00pm" % date,
+            "title":"Time2: 4:00pm-5:00pm",
             "payload":"time+2"
           },
           {
             "content_type":"text",
-            "title":"%s Time3: 5:00pm-6:00pm" % date,
+            "title":"Time3: 5:00pm-6:00pm",
             "payload":"time+3"
           }
         ]
