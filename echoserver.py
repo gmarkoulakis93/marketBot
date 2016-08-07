@@ -25,7 +25,7 @@ threeAfter     = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 4, raw
 fourAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 5, raw_time_today.year) 
 fiveAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 6, raw_time_today.year)
 dateList       = [tomorrow, oneAfter, twoAfter, threeAfter, fourAfter, fiveAfter]
-timeList       = ["Time1","Time2","Time3"]
+timeList       = ["Time1: 3:00pm-4:00pm","Time2: 4:00pm-5:00pm","Time3: 5:00pm-6:00pm"]
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
