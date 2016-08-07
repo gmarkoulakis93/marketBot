@@ -320,7 +320,7 @@ def bad_date(token, recipient, text):
   if r.status_code != requests.codes.ok:
     print r.text
 
-def available_times(token, recipient, text, date):
+def available_times(token, recipient, text):
 #leverage quick reply buttons to book a time window 
 #In the future, this will have to query some other database
 
