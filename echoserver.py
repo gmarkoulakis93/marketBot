@@ -25,6 +25,7 @@ threeAfter     = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 4, raw
 fourAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 5, raw_time_today.year) 
 fiveAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 6, raw_time_today.year)
 dateList       = [tomorrow, oneAfter, twoAfter, threeAfter, fourAfter, fiveAfter]
+timeDict       = {"Time1":"x","Time2":"y","Time3":"z"}
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -78,6 +79,8 @@ def handle_messages():
   for sender, message in messaging_events(payload):
     print "Incoming from %s: %s" % (sender, message)
     cleanDateObject = ''
+    deliveryDate    = ''
+    deliveryTime    = ''
     if "I want" in message:
       print ("Receipt should send")
       message.replace("one","1")
@@ -107,8 +110,13 @@ def handle_messages():
     #  except Exception:
     #    bad_date(PAT, sender, message)
     elif message in dateList:
+      deliveryDate = message
       available_times(PAT, sender, message)
     #  available_time_windows(PAT, sender, message, cleanDateObject)
+    elif message in timeDict.keys():
+      findTime     = message.split(':')
+      deliveryTime = findTime[-1]
+      wrapUpMessage(PAT, sender, message, deliveryDate, deliveryTime)
     else:
       send_message(PAT, sender, message)
   return "ok"
@@ -126,7 +134,8 @@ def messageDict(stuff):
     "Y":"Great! Check out all the products we offer here (hyperlink or button?). If you know what you want, place your order saying 'I want...'",
     "Sup?":"I'm well. How are you?",
     "Receipt Looks Good":"What day is best for delivery? Send me the date like this: 'Delivery date: [date in m/dd format]' (remember that the soonest we can deliver is %s)" % tomorrow,
-    "Yes":"https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
+    "Thanks":"You betcha",
+    "Thanks!":"You betcha",
   }.get(stuff, "Is this what you'd like? If so, enter 'Y'")
 
 #Now, break down the message payload and extract message and ID
@@ -354,20 +363,36 @@ def available_times(token, recipient, text):
   if r.status_code != requests.codes.ok:
     print r.text
 
-def available_time_windows(token, recipient, text, date):
-  """Send the ask for confirmation
+# def available_time_windows(token, recipient, text, date):
+#   """Send the ask for confirmation
+#   """
+
+#   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+#     params={"access_token": token},
+#     data=json.dumps({
+#       "recipient": {"id": recipient},
+#       "message": {"text": "Awesome. Here are the available time windows on %s" % date}
+# }),
+
+#     headers={'Content-type': 'application/json'})
+#   if r.status_code != requests.codes.ok:
+#     print r.text
+
+def wrapUpMessage2(token, recipient, text, date, time):
+  """Last message (payment integration would happen first)
   """
 
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     data=json.dumps({
       "recipient": {"id": recipient},
-      "message": {"text": "Awesome. Here are the available time windows on %s" % date}
+      "message": {"text": "See you on %s between %s! Call us at \
+                   1(415)111-1111 if you need our help!" % (date,time)}
 }),
 
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
-    print r.text
+    print r.text  
 
 #our receipt function that takes the itemInfoDicts created above to extract all the data we need
 #as you can see, the majority of the JSON elements are variable -- varies with user and input message
