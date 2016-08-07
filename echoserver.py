@@ -116,7 +116,7 @@ def handle_messages():
     elif message in timeDict.keys():
       findTime     = message.split(':')
       deliveryTime = findTime[-1]
-      wrapUpMessage(PAT, sender, message, deliveryDate, deliveryTime)
+      wrapUpMessage2(PAT, sender, message, deliveryDate, deliveryTime)
     else:
       send_message(PAT, sender, message)
   return "ok"
