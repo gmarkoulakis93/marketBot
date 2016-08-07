@@ -24,6 +24,7 @@ twoAfter       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 3, raw
 threeAfter     = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 4, raw_time_today.year)
 fourAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 5, raw_time_today.year) 
 fiveAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 6, raw_time_today.year)
+dateList       = [tomorrow, oneAfter, twoAfter, threeAfter, fourAfter, fiveAfter]
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -96,17 +97,18 @@ def handle_messages():
       post_receipt(PAT, sender, message)
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
-    elif "Delivery date" in message:
-      delimitMessage = message.split(" ")
-      attemptedDate  = delimitMessage[-1].strip()
-      try:
-        deliveryDateObject = datetime.datetime.strptime(attemptedDate, "%m/%d")
-        cleanDateObject    = deliveryDateObject.strftime("%m-%d")
-        date_confirm(PAT, sender, message, cleanDateObject)
-      except Exception:
-        bad_date(PAT, sender, message)
-    elif "That date looks great" in message:
-      available_time_windows(PAT, sender, message, cleanDateObject)
+    #elif "Delivery date" in message:
+    #  delimitMessage = message.split(" ")
+    #  attemptedDate  = delimitMessage[-1].strip()
+    #  try:
+    #    deliveryDateObject = datetime.datetime.strptime(attemptedDate, "%m/%d")
+    #    cleanDateObject    = deliveryDateObject.strftime("%m-%d")
+    #    date_confirm(PAT, sender, message, cleanDateObject)
+    #  except Exception:
+    #    bad_date(PAT, sender, message)
+    elif message in dateList:
+      available_times(PAT, sender, message)
+    #  available_time_windows(PAT, sender, message, cleanDateObject)
     else:
       send_message(PAT, sender, message)
   return "ok"
@@ -239,7 +241,7 @@ def post_receipt(token, recipient, text):
     print r.text
 
 def potentialDeliveryDates(token, recipient, text):
-  """leverage quick reply buttons to confirm receipt is as desired
+  """leverage quick reply buttons to confirm a delivery date
   """
 
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
@@ -313,6 +315,41 @@ def bad_date(token, recipient, text):
       "recipient": {"id": recipient},
       "message": {"text": "That date doesn't seem to be valid. Try again? Remember to use 'Delivery date: [m/dd]' format!"}
 }),
+
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
+
+def available_times(token, recipient, text, date):
+"""leverage quick reply buttons to book a time window
+   In the future, this will have to query some other database 
+  """
+
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient": {"id": recipient},
+      "message":{
+        "text":"Which of these dates were you looking to have stuff delivered?",
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"Time1: 3:00pm-4:00pm",
+            "payload":"time+1"
+          },
+          {
+            "content_type":"text",
+            "title":"Time2: 4:00pm-5:00pm",
+            "payload":"time+2"
+          },
+          {
+            "content_type":"text",
+            "title":"Time3: 5:00pm-6:00pm",
+            "payload":"time+3"
+          }
+        ]
+      }
+    }),
 
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
