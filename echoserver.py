@@ -19,7 +19,11 @@ menu_items     = ["bread", "beer", "milk", "cheese", "steak"]
 raw_time_today = datetime.datetime.now()
 today          = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day, raw_time_today.year)
 tomorrow       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 1, raw_time_today.year)
-
+oneAfter       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 2, raw_time_today.year)
+twoAfter       = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 3, raw_time_today.year)
+threeAfter     = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 4, raw_time_today.year)
+fourAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 5, raw_time_today.year) 
+fiveAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 6, raw_time_today.year)
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -90,6 +94,8 @@ def handle_messages():
       pre_receipt(PAT, sender, message)
       send_receipt(PAT, sender, message, itemInfoDicts)
       post_receipt(PAT, sender, message)
+    elif message == "Receipt Looks good":
+      potentialDeliveryDates(PAT, sender, message)
     elif "Delivery date" in message:
       delimitMessage = message.split(" ")
       attemptedDate  = delimitMessage[-1].strip()
@@ -204,7 +210,7 @@ def pre_receipt(token, recipient, text):
 #    print r.text
 
 def post_receipt(token, recipient, text):
-  """Send the ask for confirmation
+  """leverage quick reply buttons to confirm receipt is as desired
   """
 
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
@@ -231,6 +237,56 @@ def post_receipt(token, recipient, text):
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
     print r.text
+
+def potentialDeliveryDates(token, recipient, text):
+  """leverage quick reply buttons to confirm receipt is as desired
+  """
+
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient": {"id": recipient},
+      "message":{
+        "text":"Which of these dates were you looking to have stuff delivered?",
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":tomorrow,
+            "payload":"today+1"
+          },
+          {
+            "content_type":"text",
+            "title":oneAfter,
+            "payload":"today+2"
+          },
+          {
+            "content_type":"text",
+            "title":twoAfter,
+            "payload":"today+3"
+          },
+          {
+            "content_type":"text",
+            "title":threeAfter,
+            "payload":"today+4"
+          },
+          {
+            "content_type":"text",
+            "title":fourAfter,
+            "payload":"today+5"
+          },
+          {
+            "content_type":"text",
+            "title":fiveAfter,
+            "payload":"today+5"
+          }
+        ]
+      }
+    }),
+
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
+
 
 def date_confirm(token, recipient, text, date):
   """Send the ask for confirmation
