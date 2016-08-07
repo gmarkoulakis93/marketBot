@@ -115,8 +115,8 @@ def handle_messages():
       available_times(PAT, sender, message)
     #  available_time_windows(PAT, sender, message, cleanDateObject)
     elif message in timeList:
-      findTime     = message.split(':')
-      deliveryTime = findTime[1:]
+      findTime     = message.split(' ')
+      deliveryTime = findTime[-1]
       print (deliveryTime)
       wrapUpMessage2(PAT, sender, message, deliveryDate, deliveryTime)
     else:
