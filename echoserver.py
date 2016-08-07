@@ -25,7 +25,7 @@ threeAfter     = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 4, raw
 fourAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 5, raw_time_today.year) 
 fiveAfter      = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day + 6, raw_time_today.year)
 dateList       = [tomorrow, oneAfter, twoAfter, threeAfter, fourAfter, fiveAfter]
-timeDict       = {"Time1":"x","Time2":"y","Time3":"z"}
+timeList       = ["Time1","Time2","Time3"]
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -113,7 +113,7 @@ def handle_messages():
       deliveryDate = message
       available_times(PAT, sender, message)
     #  available_time_windows(PAT, sender, message, cleanDateObject)
-    elif message in timeDict.keys():
+    elif message in timeList:
       findTime     = message.split(':')
       deliveryTime = findTime[-1]
       wrapUpMessage2(PAT, sender, message, deliveryDate, deliveryTime)
@@ -338,7 +338,7 @@ def available_times(token, recipient, text):
     data=json.dumps({
       "recipient": {"id": recipient},
       "message":{
-        "text":"Which of these dates were you looking to have stuff delivered?",
+        "text":"These are the available time slots. Which works best?",
         "quick_replies":[
           {
             "content_type":"text",
