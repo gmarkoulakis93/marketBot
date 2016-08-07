@@ -81,9 +81,7 @@ def handle_messages():
     cleanDateObject = ''
     deliveryDate    = ''
     deliveryTime    = ''
-    if message == "I want a beer":
-      send_message(PAT, sender, message)
-    elif "I want" in message:
+    if "I want" in message:
       print ("Receipt should send")
       message.replace("one","1")
       message.replace("a","1")
@@ -118,7 +116,7 @@ def handle_messages():
     #  available_time_windows(PAT, sender, message, cleanDateObject)
     elif message in timeList:
       findTime     = message.split(':')
-      deliveryTime = findTime[-1]
+      deliveryTime = findTime[1:]
       print (deliveryTime)
       wrapUpMessage2(PAT, sender, message, deliveryDate, deliveryTime)
     else:
