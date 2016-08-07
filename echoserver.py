@@ -188,6 +188,21 @@ def pre_receipt(token, recipient, text):
   if r.status_code != requests.codes.ok:
     print r.text
 
+# def post_receipt(token, recipient, text):
+#   """Send the ask for confirmation
+#   """
+
+#   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+#     params={"access_token": token},
+#     data=json.dumps({
+#       "recipient": {"id": recipient},
+#       "message": {"text": "How about you give me a 'Looks good' if this is right?"}
+# }),
+
+#     headers={'Content-type': 'application/json'})
+#   if r.status_code != requests.codes.ok:
+#    print r.text
+
 def post_receipt(token, recipient, text):
   """Send the ask for confirmation
   """
@@ -196,8 +211,22 @@ def post_receipt(token, recipient, text):
     params={"access_token": token},
     data=json.dumps({
       "recipient": {"id": recipient},
-      "message": {"text": "How about you give me a 'Looks good' if this is right?"}
-}),
+      "message":{
+        "text":"Does this receipt look good?",
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"Yes",
+            "payload":"receipt_good"
+          },
+          {
+            "content_type":"text",
+            "title":"No",
+            "payload":"receipt_bad"
+          }
+        ]
+      }
+    }
 
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
