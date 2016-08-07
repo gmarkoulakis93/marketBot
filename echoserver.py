@@ -350,17 +350,17 @@ def available_times(token, recipient, text, date):
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"Time1: 3:00pm-4:00pm",
+            "title":"%s Time1: 3-4pm" % date,
             "payload":"time+1"
           },
           {
             "content_type":"text",
-            "title":"Time2: 4:00pm-5:00pm",
+            "title":"%s Time2: 4-5pm" % date,
             "payload":"time+2"
           },
           {
             "content_type":"text",
-            "title":"Time3: 5:00pm-6:00pm",
+            "title":"%s Time3: 5-6pm" % date,
             "payload":"time+3"
           }
         ]
