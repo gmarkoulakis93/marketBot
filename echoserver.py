@@ -411,7 +411,7 @@ def playWithButtons(token, recipient, text):
     params={"access_token": token},
     data=json.dumps({
       "recipient":{
-        "id":"USER_ID"
+        "id":recipient
         },
       "message":{
         "attachment":{
@@ -428,7 +428,7 @@ def playWithButtons(token, recipient, text):
               {
               "type":"postback",
               "title":"Start Chatting",
-              "payload":"USER_DEFINED_PAYLOAD"
+              "payload":"testingButtons"
               }
             ]
           }
