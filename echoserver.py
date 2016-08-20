@@ -86,7 +86,9 @@ def handle_messages():
     cleanDateObject = ''
     deliveryDate    = ''
     deliveryTime    = ''
-    if "I want" in message:
+    if "button" in message:
+      playWithButtons(PAT, sender, message)
+    elif "I want" in message:
       print ("Receipt should send")
       message.replace("one","1")
       message.replace("a","1")
@@ -399,7 +401,45 @@ def wrapUpMessage2(token, recipient, text, date, time):
 
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
-    print r.text  
+    print r.text
+
+def playWithButtons(token, recipient, text):
+  """Can we do buttons and images?
+  """
+
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient":{
+        "id":"USER_ID"
+        },
+      "message":{
+        "attachment":{
+          "type":"template",
+          "payload":{
+            "template_type":"button",
+            "text":"What do you want to do next?",
+            "buttons":[
+              {
+              "type":"web_url",
+              "url":"https://petersapparel.parseapp.com",
+              "title":"Show Website"
+              },
+              {
+              "type":"postback",
+              "title":"Start Chatting",
+              "payload":"USER_DEFINED_PAYLOAD"
+              }
+            ]
+          }
+        }
+      }
+    }),
+
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
+
 
 #our receipt function that takes the itemInfoDicts created above to extract all the data we need
 #as you can see, the majority of the JSON elements are variable -- varies with user and input message
