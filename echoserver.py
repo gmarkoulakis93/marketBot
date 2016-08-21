@@ -414,8 +414,8 @@ def playWithButtons(token, recipient, text):
         "id":recipient
         },
       "message":{
-        "attachment":{
-          [
+        [
+          "attachment":{
             "type":"template",
             "payload":{
                 "template_type":"button",
@@ -433,7 +433,9 @@ def playWithButtons(token, recipient, text):
                       }            
                   ]
                 }
-              "type":"template",
+              },
+          "attachment":{
+            "type":"template",
               "payload":{
                 "template_type":"button",
                 "text":"Or this? https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
@@ -450,8 +452,8 @@ def playWithButtons(token, recipient, text):
                       }            
                   ]
                 }
-            ]
-          }
+            }
+          ]
         }
     }),
 
