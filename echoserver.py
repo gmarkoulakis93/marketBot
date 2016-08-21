@@ -433,7 +433,6 @@ def playWithButtons(token, recipient, text):
                 ]
               }
             }
-          ]
         }
     }),
 
