@@ -413,7 +413,7 @@ def playWithButtons(token, recipient, text):
       "recipient":{
         "id":recipient
         },
-      "message":[
+      "message":{
           "attachment":{
             "type":"template",
             "payload":{
@@ -432,27 +432,8 @@ def playWithButtons(token, recipient, text):
                     }            
                   ]
                 }
-              },
-          "attachment":{
-            "type":"template",
-            "payload":{
-                "template_type":"button",
-                "text":"Or this? https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
-                "buttons":[
-                    {
-                    "type":"web_url",
-                    "url":"https://petersapparel.parseapp.com",
-                    "title":"Show Website"
-                    },
-                    {
-                    "type":"postback",
-                    "title":"Start Chatting",
-                    "payload":"Other"
-                    }            
-                  ]
-                }
               }
-        ]
+          }
     }),
 
     headers={'Content-type': 'application/json'})
