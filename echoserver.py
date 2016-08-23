@@ -413,11 +413,11 @@ def playWithButtons(token, recipient, text):
       "recipient":{
         "id":recipient
         },
-      "message":{
+      "message":[
+          {
           "attachment":{
             "type":"template",
-            "payload": [
-                {
+            "payload": {
                 "template_type":"button",
                 "text":"Want this? https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
                 "buttons":[
@@ -432,8 +432,13 @@ def playWithButtons(token, recipient, text):
                     "payload":"testingButtons"
                     }            
                   ]
-                },
-                {
+                }
+              }
+          },
+          {
+          "attachment":{
+            "type":"template",
+            "payload": {
                 "template_type":"button",
                 "text":"Or this? https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
                 "buttons":[
@@ -449,9 +454,9 @@ def playWithButtons(token, recipient, text):
                     }            
                   ]
                 }
-              ]
               }
           }
+        ]
     }),
 
     headers={'Content-type': 'application/json'})
