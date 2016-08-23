@@ -414,7 +414,7 @@ def playWithButtons(token, recipient, text):
         "id":recipient
         },
       "message":{
-        [
+        {
           "attachment":{
             "type":"template",
             "payload":{
@@ -453,7 +453,7 @@ def playWithButtons(token, recipient, text):
                   ]
                 }
               }
-            ]
+            }
         }
     }),
 
