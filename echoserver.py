@@ -414,39 +414,46 @@ def playWithButtons(token, recipient, text):
         "id":recipient
         },
       "message":{
-        "attachment":{
-          "type":"template",
-          "payload":{
-              "template_type":"button",
-              "text":"Want this? https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
-              "buttons":[
-                  {
-                  "type":"web_url",
-                  "url":"https://petersapparel.parseapp.com",
-                  "title":"Show Website"
-                  },
-                  {
-                  "type":"postback",
-                  "title":"Start Chatting",
-                  "payload":"testingButtons"
-                  }            
-                ]
-              "template_type":"button",
-              "text":"Or this? https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
-              "buttons":[
-                  {
-                  "type":"web_url",
-                  "url":"https://petersapparel.parseapp.com",
-                  "title":"Show Website"
-                  },
-                  {
-                  "type":"postback",
-                  "title":"Start Chatting",
-                  "payload":"OtherButtons"
-                  }
-                ]
+        [
+          "attachment":{
+            "type":"template",
+            "payload":{
+                "template_type":"button",
+                "text":"Want this? https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
+                "buttons":[
+                    {
+                    "type":"web_url",
+                    "url":"https://petersapparel.parseapp.com",
+                    "title":"Show Website"
+                    },
+                    {
+                    "type":"postback",
+                    "title":"Start Chatting",
+                    "payload":"testingButtons"
+                    }            
+                  ]
+                }
+              },
+          "attachment":{
+            "type":"template",
+            "payload":{
+                "template_type":"button",
+                "text":"or this? https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
+                "buttons":[
+                    {
+                    "type":"web_url",
+                    "url":"https://petersapparel.parseapp.com",
+                    "title":"Show Website"
+                    },
+                    {
+                    "type":"postback",
+                    "title":"Start Chatting",
+                    "payload":"other"
+                    }            
+                  ]
+                }
               }
-            }
+            ]
         }
     }),
 
