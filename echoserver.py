@@ -353,7 +353,7 @@ def order_prompt(token, recipient, text):
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"Yes, I'd like to order",
+            "title":"Yes, let's order",
             "payload":"yesOrder"
           },
           {
