@@ -86,9 +86,7 @@ def handle_messages():
     cleanDateObject = ''
     deliveryDate    = ''
     deliveryTime    = ''
-    if "button" in message:
-      playWithCarousel(PAT, sender, message)
-    elif "I want" in message:
+    if "I want" in message:
       print ("Receipt should send")
       message.replace("one","1")
       message.replace("a","1")
@@ -111,6 +109,8 @@ def handle_messages():
       potentialDeliveryDates(PAT, sender, message)
     elif message == "Yes, let's order":
       initial_item_prompt(PAT, sender, message)
+    elif message == "Bread!":
+      bread_set1(PAT, sender, message)
     #elif "Delivery date" in message:
     #  delimitMessage = message.split(" ")
     #  attemptedDate  = delimitMessage[-1].strip()
@@ -494,8 +494,8 @@ def wrapUpMessage2(token, recipient, text, date, time):
   if r.status_code != requests.codes.ok:
     print r.text
 
-def playWithCarousel(token, recipient, text):
-  """Send carousel of product items
+def bread_set1(token, recipient, text):
+  """Send carousel of breads
   """
 
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
@@ -511,36 +511,36 @@ def playWithCarousel(token, recipient, text):
             "template_type":"generic",
             "elements":[
               {
-                "title":"Welcome to Peter\'s Hats",
-                "image_url":"http://petersapparel.parseapp.com/img/item100-thumb.png",
-                "subtitle":"We\'ve got the right hat for everyone.",
+                "title":"Semi-Freddis Ciabatta",
+                "image_url":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
+                "subtitle":"$5 per loaf",
                 "buttons":[
               {
-                "type":"web_url",
-                "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
-                "title":"View Website"
+                "type":"postback",
+                "title":"I want one",
+                "payload":"OneCiabatta"
               },
               {
                 "type":"postback",
-                "title":"Start Chatting",
-                "payload":"somethingHere"
+                "title":"I want two",
+                "payload":"TwoCiabatta"
               }              
             ]
           },
           {
-                "title":"Welcome to Peter\'s Hats",
-                "image_url":"http://cdn.modernfarmer.com/wp-content/uploads/2014/11/shoppinghero.jpg",
-                "subtitle":"We\'ve got the right hat for everyone.",
+                "title":"Semi-Freddis Sourdough",
+                "image_url":"http://www.seriouseats.com/images/2013/08/20130820-san-francisco-bread-taste-test-17.jpg",
+                "subtitle":"$4 per loaf",
                 "buttons":[
               {
-                "type":"web_url",
-                "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
-                "title":"View Website"
+                "type":"postback",
+                "title":"I want one",
+                "payload":"OneSour"
               },
               {
                 "type":"postback",
-                "title":"Start Chatting",
-                "payload":"somethingHere2"
+                "title":"I want two",
+                "payload":"TwoSour"
               }              
             ]
           }
