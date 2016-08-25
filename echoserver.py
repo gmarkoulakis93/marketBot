@@ -109,6 +109,8 @@ def handle_messages():
       order_prompt(PAT, sender, message)
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
+    elif message == "Yes, let's order":
+      initial_item_prompt(PAT, sender, message)
     #elif "Delivery date" in message:
     #  delimitMessage = message.split(" ")
     #  attemptedDate  = delimitMessage[-1].strip()
@@ -361,6 +363,64 @@ def order_prompt(token, recipient, text):
             "content_type":"text",
             "title":"Naw",
             "payload":"noOrder"
+          }
+        ]
+      }
+    }),
+
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
+
+def initial_item_prompt(token, recipient, text):
+#leverage quick reply buttons to make sure they want to place an order
+
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient": {"id": recipient},
+      "message":{
+        "text":"Choose which broad item you'd like to browse first, and then I'll show you some options to order!",
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"Bread!",
+            "payload":"sendBreads"
+          },
+          {
+            "content_type":"text",
+            "title":"Milk!",
+            "payload":"sendMilks"
+          },
+          {
+            "content_type":"text",
+            "title":"Beer!",
+            "payload":"sendBeers"
+          },
+          {
+            "content_type":"text",
+            "title":"Water!",
+            "payload":"sendWaters"
+          },
+          {
+            "content_type":"text",
+            "title":"Pasta!",
+            "payload":"sendPasta"
+          },
+          {
+            "content_type":"text",
+            "title":"Meats!",
+            "payload":"sendMeats"
+          },
+          {
+            "content_type":"text",
+            "title":"Coffee Beans!",
+            "payload":"sendCoffeeBeans"
+          },
+          {
+            "content_type":"text",
+            "title":"Hmm...what else?",
+            "payload":"sendNextSet"
           }
         ]
       }
