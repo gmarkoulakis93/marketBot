@@ -9,7 +9,7 @@ import csv
 
 app = Flask(__name__)
 
-#rename variables (don't use something like myDicts)
+#https://delivery-testing.herokuapp.com/ place in "Callback URL" when not running locally
 
 # This is the page access token needed to talk to the Messenger API
 PAT            = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKnq5T32wVjqZApG6bKOFujVdZAr2DX31SXTKqZC2ZCZAf8NBOHGqrtGwpGZB9sOWjar6n3XifD6G7ywuMrMNbH75dGpw9oYadgdtqVPCrhIU29p2pzwZDZD'
@@ -87,7 +87,7 @@ def handle_messages():
     deliveryDate    = ''
     deliveryTime    = ''
     if "button" in message:
-      playWithButtons(PAT, sender, message)
+      playWithCarousel(PAT, sender, message)
     elif "I want" in message:
       print ("Receipt should send")
       message.replace("one","1")
@@ -105,6 +105,8 @@ def handle_messages():
       pre_receipt(PAT, sender, message)
       send_receipt(PAT, sender, message, itemInfoDicts)
       post_receipt(PAT, sender, message)
+    elif message == "Hi": #expand this to check for a set of greetings
+      order_prompt(PAT, sender, message)
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
     #elif "Delivery date" in message:
@@ -134,7 +136,7 @@ def handle_messages():
 #For our send_message function, this is our rules set
 def messageDict(stuff):
   return {
-    "Hi":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
+    #"Hi":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
     "Hi!":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
     "Hey":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
     "Hey!":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order? Send me 'Y' if so.",
@@ -339,6 +341,34 @@ def bad_date(token, recipient, text):
   if r.status_code != requests.codes.ok:
     print r.text
 
+def order_prompt(token, recipient, text):
+#leverage quick reply buttons to make sure they want to place an order
+
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    data=json.dumps({
+      "recipient": {"id": recipient},
+      "message":{
+        "text":"Hi there! I'm the Chicos Market Delivery Bot. Would you like to place an order?",
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"Yes, I'd like to order",
+            "payload":"yesOrder"
+          },
+          {
+            "content_type":"text",
+            "title":"Naw",
+            "payload":"noOrder"
+          }
+        ]
+      }
+    }),
+
+    headers={'Content-type': 'application/json'})
+  if r.status_code != requests.codes.ok:
+    print r.text
+
 def available_times(token, recipient, text, date):
 #leverage quick reply buttons to book a time window 
 #In the future, this will have to query some other database
@@ -403,8 +433,8 @@ def wrapUpMessage2(token, recipient, text, date, time):
   if r.status_code != requests.codes.ok:
     print r.text
 
-def playWithButtons(token, recipient, text):
-  """Can we do buttons and images?
+def playWithCarousel(token, recipient, text):
+  """Send carousel of product items
   """
 
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
@@ -412,52 +442,52 @@ def playWithButtons(token, recipient, text):
     data=json.dumps({
       "recipient":{
         "id":recipient
-        },
-      "message":[
-          {
-          "attachment":{
-            "type":"template",
-            "payload": {
-                "template_type":"button",
-                "text":"Want this? https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
+      },
+      "message":{
+        "attachment":{
+          "type":"template",
+          "payload":{
+            "template_type":"generic",
+            "elements":[
+              {
+                "title":"Welcome to Peter\'s Hats",
+                "image_url":"http://petersapparel.parseapp.com/img/item100-thumb.png",
+                "subtitle":"We\'ve got the right hat for everyone.",
                 "buttons":[
-                    {
-                    "type":"web_url",
-                    "url":"https://petersapparel.parseapp.com",
-                    "title":"Show Website"
-                    },
-                    {
-                    "type":"postback",
-                    "title":"Start Chatting",
-                    "payload":"testingButtons"
-                    }            
-                  ]
-                }
-              }
+              {
+                "type":"web_url",
+                "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
+                "title":"View Website"
+              },
+              {
+                "type":"postback",
+                "title":"Start Chatting",
+                "payload":"somethingHere"
+              }              
+            ]
           },
           {
-          "attachment":{
-            "type":"template",
-            "payload": {
-                "template_type":"button",
-                "text":"Or this? https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/005/085/231/20d3c36.jpg",
+                "title":"Welcome to Peter\'s Hats",
+                "image_url":"http://cdn.modernfarmer.com/wp-content/uploads/2014/11/shoppinghero.jpg",
+                "subtitle":"We\'ve got the right hat for everyone.",
                 "buttons":[
-                    {
-                    "type":"web_url",
-                    "url":"https://petersapparel.parseapp.com",
-                    "title":"Show Website"
-                    },
-                    {
-                    "type":"postback",
-                    "title":"Start Chatting",
-                    "payload":"other"
-                    }            
-                  ]
-                }
-              }
+              {
+                "type":"web_url",
+                "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
+                "title":"View Website"
+              },
+              {
+                "type":"postback",
+                "title":"Start Chatting",
+                "payload":"somethingHere2"
+              }              
+            ]
           }
         ]
-    }),
+      }
+    }
+  }
+}),
 
     headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:
