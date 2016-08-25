@@ -148,6 +148,7 @@ def messageDict(stuff):
     "Receipt Looks Good":"What day is best for delivery? Send me the date like this: 'Delivery date: [date in m/dd format]' (remember that the soonest we can deliver is %s)" % tomorrow,
     "Thanks":"You betcha",
     "Thanks!":"You betcha",
+    "Naw":"Hmmm...I'm sorry, I'm not a very smart bot. I just take orders :("
   }.get(stuff, "Is this what you'd like? If so, enter 'Y'")
 
 #Now, break down the message payload and extract message and ID
