@@ -520,11 +520,11 @@ def wrapUpMessage2(token, recipient, text, date, time):
 def bread_set1(token, recipient, text, orderedItem):
   """Send carousel of breads
   """
-  item1.1    = str(orderedItem) + "1.1"
-  item1.2    = str(orderedItem) + "1.2"
-  item1.3    = str(orderedItem) + "1.3"
-  item1.4    = str(orderedItem) + "1.4"
-  item1.5    = str(orderedItem) + "1.5"
+  item1_1    = orderedItem + "1.1"
+  item1_2    = orderedItem + "1.2"
+  item1_3    = orderedItem + "1.3"
+  item1_4    = orderedItem + "1.4"
+  item1_5    = orderedItem + "1.5"
 
   #figure the custom payload later
   #payloadOne = foods[orderedItem][item]
@@ -544,9 +544,9 @@ def bread_set1(token, recipient, text, orderedItem):
             "template_type":"generic",
             "elements":[
               {
-                "title":foods[orderedItem][item1.1]["title"],
-                "image_url":foods[orderedItem][item1.1]["image_url"],
-                "subtitle":foods[orderedItem][item1.1]["subtitle"],
+                "title":foods[orderedItem][item1_1]["title"],
+                "image_url":foods[orderedItem][item1_1]["image_url"],
+                "subtitle":foods[orderedItem][item1_1]["subtitle"],
                 "buttons":[
               {
                 "type":"postback",
@@ -561,9 +561,9 @@ def bread_set1(token, recipient, text, orderedItem):
             ]
           },
           {
-                "title":foods[orderedItem][item1.2]["title"],
-                "image_url":foods[orderedItem][item1.2]["image_url"],
-                "subtitle":foods[orderedItem][item1.2]["subtitle"],
+                "title":foods[orderedItem][item1_2]["title"],
+                "image_url":foods[orderedItem][item1_2]["image_url"],
+                "subtitle":foods[orderedItem][item1_2]["subtitle"],
                 "buttons":[
               {
                 "type":"postback",
