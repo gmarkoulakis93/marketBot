@@ -38,22 +38,39 @@ timeList       = ["%s Time1: 3-4pm" % tomorrow,"%s Time2: 4-5pm" % tomorrow, "%s
 #function and you'll need to capture the user's message in handle_messages
 
 foods      = {"bread": {
-              "bread1.1":{
-              "title":"Semi-Freddis Ciabatta",
-              "image_url":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
-              "subtitle":"$5 per loaf",
-              "forPayload":"Ciabatta"},
-              "bread1.2":{
-              "title":"Semi-Freddis Sourdough",
-              "image_url":"http://www.seriouseats.com/images/2013/08/20130820-san-francisco-bread-taste-test-17.jpg",
-              "subtitle":"$4 per loaf",
-              "forPayload":"Sourdough"},
-              "bread1.3":{
-              "title":"Semi-Freddis Wheat Roll",
-              "image_url":"http://www.semifreddis.com/uploads/media_items/deli-wheat.900.600.s.jpg",
-              "subtitle":"$2.50 per loaf",
-              "forPayload":"Wheat"}
-                      }
+                "bread1.1":{
+                  "title":"Semi-Freddis Ciabatta",
+                  "image_url":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
+                  "subtitle":"$5 per loaf",
+                  "forPayload":"Ciabatta"},
+                "bread1.2":{
+                  "title":"Semi-Freddis Sourdough",
+                  "image_url":"http://www.seriouseats.com/images/2013/08/20130820-san-francisco-bread-taste-test-17.jpg",
+                  "subtitle":"$4 per loaf",
+                  "forPayload":"Sourdough"},
+                "bread1.3":{
+                  "title":"Semi-Freddis Wheat Roll",
+                  "image_url":"http://www.semifreddis.com/uploads/media_items/deli-wheat.900.600.s.jpg",
+                  "subtitle":"$2.50 per loaf",
+                  "forPayload":"Wheat"}
+                      },
+              "milk": {
+                "milk1.1":{
+                  "title":"Clover Fat Free (Gallon)",
+                  "image_url":"https://www.grubmarket.com/images/large/grubmarketdairy/9419646821_clover_organic_farms_fat_free_milk.jpg",
+                  "subtitle":"$3",
+                  "forPayload":"FatFree"},
+                "milk1.2":{
+                  "title":"Clover Chocolate Milk",
+                  "image_url":"https://s3.amazonaws.com/static.caloriecount.about.com/images/medium/clover-stornetta-farms-percent-172233.jpg",
+                  "subtitle":"$2",
+                  "forPayload":"ChocoMilk"},
+                "milk1.3":{
+                  "title":"Clover Whole Milk",
+                  "image_url":"https://s3.amazonaws.com/static.caloriecount.about.com/images/medium/clover-organic-farms-milk-80300.jpg",
+                  "subtitle":"$4",
+                  "forPayload":"WholeMilk"}
+                }
               }
 
 
