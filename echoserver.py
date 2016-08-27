@@ -17,6 +17,9 @@ PAT            = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKn
 #All the items that the user could order
 menu_items     = ["bread", "beer", "milk", "cheese", "steak"]
 browse_list    = ["Bread!", "Beer!", "Milk!", "Cheese!", "Steak!"]
+take_back_list = []
+for stuff in menu_items:
+  take_back_list.append("I don't want %s :(" % stuff)
 raw_time_today = datetime.datetime.now()
 today          = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day, raw_time_today.year)
 tomorrow       = "%s/%s" % (raw_time_today.month, raw_time_today.day + 1)
@@ -150,7 +153,7 @@ def handle_messages():
       order_prompt(PAT, sender, message)
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
-    elif message == "Yes, let's order":
+    elif message == "Yes, let's order" or message in take_back_list:
       initial_item_prompt(PAT, sender, message)
     elif message in browse_list:
       orderedItem = message[:-1].lower()
@@ -580,7 +583,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"Eek, I don't want %s :(" % orderedItem,
+                "title":"I don't want %s :(" % orderedItem,
                 "payload":"back2categories"
                 }
                 ]
