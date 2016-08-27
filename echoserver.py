@@ -19,7 +19,7 @@ menu_items     = ["bread", "beer", "milk", "cheese", "steak"]
 browse_list    = ["Bread!", "Beer!", "Milk!", "Cheese!", "Steak!"]
 take_back_list = []
 for stuff in menu_items:
-  take_back_list.append("I don't want %s :(" % stuff)
+  take_back_list.append("Eh, don't want %s" % stuff)
 raw_time_today = datetime.datetime.now()
 today          = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day, raw_time_today.year)
 tomorrow       = "%s/%s" % (raw_time_today.month, raw_time_today.day + 1)
@@ -583,7 +583,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"I don't want %s :(" % orderedItem,
+                "title":"Eh, don't want %s" % orderedItem,
                 "payload":"back2categories"
                 }
                 ]
@@ -605,7 +605,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"I don't want %s :(" % orderedItem,
+                "title":"Eh, don't want %s" % orderedItem,
                 "payload":"back2categories"
                 }
                 ]
@@ -627,7 +627,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"I don't want %s :(" % orderedItem,
+                "title":"Eh, don't want %s" % orderedItem,
                 "payload":"back2categories"
                 }
                 ]
