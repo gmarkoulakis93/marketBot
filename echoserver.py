@@ -580,7 +580,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"Take Me Back! I don't want %s" % orderedItem,
+                "title":"I don't want %s, anymore" % orderedItem,
                 "payload":"back2categories"
                 }
                 ]
@@ -602,7 +602,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"Take Me Back! I don't want %s" % orderedItem,
+                "title":"I don't want %s, anymore" % orderedItem,
                 "payload":"back2categories"
                 }
                 ]
@@ -624,7 +624,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"Take Me Back! I don't want %s" % orderedItem,
+                "title":"I don't want %s, anymore" % orderedItem,
                 "payload":"back2categories"
                 }
                 ]
