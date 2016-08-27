@@ -611,7 +611,7 @@ def bread_set1(token, recipient, text, orderedItem):
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
     json=in_data)
-    headers={'Content-type': 'application/json'})
+    #headers={'Content-type': 'application/json'})
   
   if r.status_code != requests.codes.ok:
     print r.text
