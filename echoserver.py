@@ -530,9 +530,6 @@ def bread_set1(token, recipient, text, orderedItem):
   item1_3    = orderedItem + "1.3"
   item1_4    = orderedItem + "1.4"
   item1_5    = orderedItem + "1.5"
-
-  itemList = [item1_1, item1_2, item1_3, item1_4, item1_5]
-
   #figure the custom payload later
   #payloadOne = foods[orderedItem][item]
   #payloadX   = "X"   + orderedItem
@@ -542,9 +539,6 @@ def bread_set1(token, recipient, text, orderedItem):
   #  params={"access_token": token},
   #  data=json.dumps(
   in_data={
-    "recipient":{
-      "id":recipient
-    },
     "message":{
       "attachment":{
         "type":"template",
@@ -605,8 +599,11 @@ def bread_set1(token, recipient, text, orderedItem):
           ]
         }
       }
-    }
   },
+  "recipient": {
+      "id": recipient
+    }
+  }
   
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
