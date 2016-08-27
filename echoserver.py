@@ -546,11 +546,13 @@ def wrapUpMessage2(token, recipient, text, date, time):
 def browse_set1(token, recipient, text, orderedItem):
   """Send carousel of breads
   """
-  item1_1    = orderedItem + "1.1"
-  item1_2    = orderedItem + "1.2"
-  item1_3    = orderedItem + "1.3"
-  item1_4    = orderedItem + "1.4"
-  item1_5    = orderedItem + "1.5"
+  item1_1         = orderedItem + "1.1"
+  item1_2         = orderedItem + "1.2"
+  item1_3         = orderedItem + "1.3"
+  item1_4         = orderedItem + "1.4"
+  item1_5         = orderedItem + "1.5"
+  
+  take_back_thing = "Eh, don't want %s" % orderedItem
   #figure the custom payload later
   #payloadOne = foods[orderedItem][item]
   #payloadX   = "X"   + orderedItem
@@ -583,7 +585,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"Eh, don't want %s" % orderedItem,
+                "title": take_back_thing,
                 "payload":"back2categories"
                 }
                 ]
@@ -605,7 +607,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"Eh, don't want %s" % orderedItem,
+                "title": take_back_thing,
                 "payload":"back2categories"
                 }
                 ]
@@ -627,7 +629,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"Eh, don't want %s" % orderedItem,
+                "title":take_back_thing,
                 "payload":"back2categories"
                 }
                 ]
