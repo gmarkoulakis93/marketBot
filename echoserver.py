@@ -584,7 +584,7 @@ def bread_set1(token, recipient, text, orderedItem):
                 "payload":"MoreSour"
                 }              
                 ]
-            }
+            },
             {
             "title":foods[orderedItem][item1_3]["title"],
               "image_url":foods[orderedItem][item1_3]["image_url"],
@@ -601,7 +601,7 @@ def bread_set1(token, recipient, text, orderedItem):
                 "payload":"MoreWheat"
                 }              
                 ]
-            },
+            }
           ]
         }
       }
