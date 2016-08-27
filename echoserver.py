@@ -153,7 +153,7 @@ def handle_messages():
       order_prompt(PAT, sender, message)
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
-    elif message == "Yes, let's order" or message in take_back_list:
+    elif message == "Yes, let's order" or message == "back2categories":
       initial_item_prompt(PAT, sender, message)
     elif message in browse_list:
       orderedItem = message[:-1].lower()
@@ -210,6 +210,8 @@ def messaging_events(payload):
   for event in messaging_events:
     if "message" in event and "text" in event["message"]:
       yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
+    elif "postback" in event:
+      yield event["sender"]["id"], event["postback"]["payload"]
     else:
       yield event["sender"]["id"], "I can't echo this"
 
@@ -544,7 +546,7 @@ def wrapUpMessage2(token, recipient, text, date, time):
 #we can make this a generic carousel that can send for any product chosen, we just need a dictionary
 #with the appropriate data structure that keys off of what the user inputs in the initial prompt
 def browse_set1(token, recipient, text, orderedItem):
-  """Send carousel of breads
+  """Send carousel of products
   """
   item1_1         = orderedItem + "1.1"
   item1_2         = orderedItem + "1.2"
