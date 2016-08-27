@@ -31,6 +31,26 @@ timeList       = ["%s Time1: 3-4pm" % tomorrow,"%s Time2: 4-5pm" % tomorrow, "%s
                   "%s Time1: 3-4pm" % threeAfter,"%s Time2: 4-5pm" % threeAfter, "%s Time3: 5-6pm" % threeAfter,
                   "%s Time1: 3-4pm" % fourAfter,"%s Time2: 4-5pm" % fourAfter, "%s Time3: 5-6pm" % fourAfter,
                   "%s Time1: 3-4pm" % fiveAfter,"%s Time2: 4-5pm" % fiveAfter, "%s Time3: 5-6pm" % fiveAfter]
+#create a dictionary that houses the appropriate data structure
+#e.g.,
+#foods = {bread: {bread1:{"title":"title1", "price":123},bread2:{"title":"title2", "price":222}}}
+#build out the above and implement into JSON, remember, you'll need an extra argument in the carousel 
+#function and you'll need to capture the user's message in handle_messages
+
+foodsDict = {"bread": {
+              "bread1.1":{
+              "title":"Semi-Freddis Ciabatta",
+              "image_url":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
+              "subtitle":"$5 per loaf",
+              "forPayload":"Ciabatta"},
+              "bread1.2":{
+              "title":"Semi-Freddis Sourdough",
+              "image_url":"http://www.seriouseats.com/images/2013/08/20130820-san-francisco-bread-taste-test-17.jpg",
+              "subtitle":"$4 per loaf",
+              "forPayload":"Sourdough"}
+                      }
+              }
+
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -110,7 +130,8 @@ def handle_messages():
     elif message == "Yes, let's order":
       initial_item_prompt(PAT, sender, message)
     elif message == "Bread!":
-      bread_set1(PAT, sender, message)
+      orderedItem = message[:-1].lower()
+      bread_set1(PAT, sender, message, orderedItem)
     #elif "Delivery date" in message:
     #  delimitMessage = message.split(" ")
     #  attemptedDate  = delimitMessage[-1].strip()
@@ -494,9 +515,21 @@ def wrapUpMessage2(token, recipient, text, date, time):
   if r.status_code != requests.codes.ok:
     print r.text
 
-def bread_set1(token, recipient, text):
+#we can make this a generic carousel that can send for any product chosen, we just need a dictionary
+#with the appropriate data structure that keys off of what the user inputs in the initial prompt
+def bread_set1(token, recipient, text, orderedItem):
   """Send carousel of breads
   """
+  item1.1    = orderedItem + "1.1"
+  item1.2    = orderedItem + "1.2"
+  item1.3    = orderedItem + "1.3"
+  item1.4    = orderedItem + "1.4"
+  item1.5    = orderedItem + "1.5"
+
+  #figure the custom payload later
+  #payloadOne = foods[orderedItem][item]
+  #payloadX   = "X"   + orderedItem
+
 
   r = requests.post("https://graph.facebook.com/v2.6/me/messages",
     params={"access_token": token},
@@ -511,36 +544,36 @@ def bread_set1(token, recipient, text):
             "template_type":"generic",
             "elements":[
               {
-                "title":"Semi-Freddis Ciabatta",
-                "image_url":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
-                "subtitle":"$5 per loaf",
+                "title":foods[orderedItem][item1.1]["title"],
+                "image_url":foods[orderedItem][item1.1]["image_url"],
+                "subtitle":foods[orderedItem][item1.1]["subtitle"],
                 "buttons":[
               {
                 "type":"postback",
-                "title":"I want one",
+                "title":"I want 1",
                 "payload":"OneCiabatta"
               },
               {
                 "type":"postback",
-                "title":"I want two",
-                "payload":"TwoCiabatta"
+                "title":"I want more than 1",
+                "payload":"MoreCiabatta"
               }              
             ]
           },
           {
-                "title":"Semi-Freddis Sourdough",
-                "image_url":"http://www.seriouseats.com/images/2013/08/20130820-san-francisco-bread-taste-test-17.jpg",
-                "subtitle":"$4 per loaf",
+                "title":foods[orderedItem][item1.2]["title"],
+                "image_url":foods[orderedItem][item1.2]["image_url"],
+                "subtitle":foods[orderedItem][item1.2]["subtitle"],
                 "buttons":[
               {
                 "type":"postback",
-                "title":"I want one",
+                "title":"I want 1",
                 "payload":"OneSour"
               },
               {
                 "type":"postback",
-                "title":"I want two",
-                "payload":"TwoSour"
+                "title":"I want more than 1",
+                "payload":"MoreSour"
               }              
             ]
           }
