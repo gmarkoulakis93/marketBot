@@ -16,6 +16,7 @@ PAT            = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKn
 
 #All the items that the user could order
 menu_items     = ["bread", "beer", "milk", "cheese", "steak"]
+browse_list    = ["Bread!", "Beer!", "Milk!", "Cheese!", "Steak!"]
 raw_time_today = datetime.datetime.now()
 today          = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day, raw_time_today.year)
 tomorrow       = "%s/%s" % (raw_time_today.month, raw_time_today.day + 1)
@@ -151,9 +152,9 @@ def handle_messages():
       potentialDeliveryDates(PAT, sender, message)
     elif message == "Yes, let's order":
       initial_item_prompt(PAT, sender, message)
-    elif message == "Bread!":
+    elif message in browse_list:
       orderedItem = message[:-1].lower()
-      bread_set1(PAT, sender, message, orderedItem)
+      browse_set1(PAT, sender, message, orderedItem)
     #elif "Delivery date" in message:
     #  delimitMessage = message.split(" ")
     #  attemptedDate  = delimitMessage[-1].strip()
@@ -539,7 +540,7 @@ def wrapUpMessage2(token, recipient, text, date, time):
 
 #we can make this a generic carousel that can send for any product chosen, we just need a dictionary
 #with the appropriate data structure that keys off of what the user inputs in the initial prompt
-def bread_set1(token, recipient, text, orderedItem):
+def browse_set1(token, recipient, text, orderedItem):
   """Send carousel of breads
   """
   item1_1    = orderedItem + "1.1"
