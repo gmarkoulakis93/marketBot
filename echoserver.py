@@ -47,7 +47,12 @@ foods      = {"bread": {
               "title":"Semi-Freddis Sourdough",
               "image_url":"http://www.seriouseats.com/images/2013/08/20130820-san-francisco-bread-taste-test-17.jpg",
               "subtitle":"$4 per loaf",
-              "forPayload":"Sourdough"}
+              "forPayload":"Sourdough"},
+              "bread1.3":{
+              "title":"Semi-Freddis Wheat Roll",
+              "image_url":"http://www.semifreddis.com/uploads/media_items/deli-wheat.900.600.s.jpg",
+              "subtitle":"$2.50 per loaf",
+              "forPayload":"Wheat"}
                       }
               }
 
@@ -526,64 +531,88 @@ def bread_set1(token, recipient, text, orderedItem):
   item1_4    = orderedItem + "1.4"
   item1_5    = orderedItem + "1.5"
 
+  itemList = [item1_1, item1_2, item1_3, item1_4, item1_5]
+
   #figure the custom payload later
   #payloadOne = foods[orderedItem][item]
   #payloadX   = "X"   + orderedItem
 
 
-  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
-    params={"access_token": token},
-    data=json.dumps({
-      "recipient":{
-        "id":recipient
-      },
-      "message":{
-        "attachment":{
-          "type":"template",
-          "payload":{
-            "template_type":"generic",
-            "elements":[
+  #r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+  #  params={"access_token": token},
+  #  data=json.dumps(
+  in_data={
+    "recipient":{
+      "id":recipient
+    },
+    "message":{
+      "attachment":{
+        "type":"template",
+        "payload":{
+          "template_type":"generic",
+          "elements":[
               {
-                "title":foods[orderedItem][item1_1]["title"],
-                "image_url":foods[orderedItem][item1_1]["image_url"],
-                "subtitle":foods[orderedItem][item1_1]["subtitle"],
-                "buttons":[
-              {
+              "title":foods[orderedItem][item1_1]["title"],
+              "image_url":foods[orderedItem][item1_1]["image_url"],
+              "subtitle":foods[orderedItem][item1_1]["subtitle"],
+              "buttons":[
+                {
                 "type":"postback",
                 "title":"I want 1",
                 "payload":"OneCiabatta"
-              },
-              {
+                },
+                {
                 "type":"postback",
                 "title":"I want more than 1",
                 "payload":"MoreCiabatta"
-              }              
-            ]
-          },
-          {
-                "title":foods[orderedItem][item1_2]["title"],
-                "image_url":foods[orderedItem][item1_2]["image_url"],
-                "subtitle":foods[orderedItem][item1_2]["subtitle"],
-                "buttons":[
+                }              
+                ]
+              },
               {
+              "title":foods[orderedItem][item1_2]["title"],
+              "image_url":foods[orderedItem][item1_2]["image_url"],
+              "subtitle":foods[orderedItem][item1_2]["subtitle"],
+              "buttons":[
+                {
                 "type":"postback",
                 "title":"I want 1",
                 "payload":"OneSour"
-              },
-              {
+                },
+                {
                 "type":"postback",
                 "title":"I want more than 1",
                 "payload":"MoreSour"
-              }              
-            ]
-          }
-        ]
+                }              
+                ]
+            }
+            {
+            "title":foods[orderedItem][item1_3]["title"],
+              "image_url":foods[orderedItem][item1_3]["image_url"],
+              "subtitle":foods[orderedItem][item1_3]["subtitle"],
+              "buttons":[
+                {
+                "type":"postback",
+                "title":"I want 1",
+                "payload":"OneWheat"
+                },
+                {
+                "type":"postback",
+                "title":"I want more than 1",
+                "payload":"MoreWheat"
+                }              
+                ]
+            },
+          ]
+        }
       }
     }
-  }
-}),
-
+  },
+  
+  r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+    params={"access_token": token},
+    json=in_data)
     headers={'Content-type': 'application/json'})
+  
   if r.status_code != requests.codes.ok:
     print r.text
 
