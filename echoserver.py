@@ -520,6 +520,7 @@ def wrapUpMessage2(token, recipient, text, date, time):
 def bread_set1(token, recipient, text, orderedItem):
   """Send carousel of breads
   """
+  print(orderedItem)
   item1.1    = orderedItem + "1.1"
   item1.2    = orderedItem + "1.2"
   item1.3    = orderedItem + "1.3"
