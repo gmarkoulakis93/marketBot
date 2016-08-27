@@ -37,7 +37,7 @@ timeList       = ["%s Time1: 3-4pm" % tomorrow,"%s Time2: 4-5pm" % tomorrow, "%s
 #build out the above and implement into JSON, remember, you'll need an extra argument in the carousel 
 #function and you'll need to capture the user's message in handle_messages
 
-foodsDict = {"bread": {
+foods      = {"bread": {
               "bread1.1":{
               "title":"Semi-Freddis Ciabatta",
               "image_url":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
