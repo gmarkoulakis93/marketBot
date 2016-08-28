@@ -35,6 +35,8 @@ timeList       = ["%s Time1: 3-4pm" % tomorrow,"%s Time2: 4-5pm" % tomorrow, "%s
                   "%s Time1: 3-4pm" % threeAfter,"%s Time2: 4-5pm" % threeAfter, "%s Time3: 5-6pm" % threeAfter,
                   "%s Time1: 3-4pm" % fourAfter,"%s Time2: 4-5pm" % fourAfter, "%s Time3: 5-6pm" % fourAfter,
                   "%s Time1: 3-4pm" % fiveAfter,"%s Time2: 4-5pm" % fiveAfter, "%s Time3: 5-6pm" % fiveAfter]
+
+myBasket       = []
 #create a dictionary that houses the appropriate data structure
 #e.g.,
 #foods = {bread: {bread1:{"title":"title1", "price":123},bread2:{"title":"title2", "price":222}}}
@@ -43,40 +45,57 @@ timeList       = ["%s Time1: 3-4pm" % tomorrow,"%s Time2: 4-5pm" % tomorrow, "%s
 
 foods      = {"bread": {
                 "bread1.1":{
-                  "title":"Semi-Freddis Ciabatta",
-                  "image_url":"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
-                  "subtitle":"$5 per loaf",
-                  "forPayload":"Ciabatta"},
+                  "title"           :"Semi-Freddis Ciabatta",
+                  "image_url"       :"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
+                  "subtitle"        :"$5 per loaf",
+                  "forPayloadOne"   :"1 bread1.1",
+                  "receiptSubtitle" :"Delicious loaf",
+                  "receiptPrice"    : 5},
                 "bread1.2":{
-                  "title":"Semi-Freddis Sourdough",
-                  "image_url":"http://www.seriouseats.com/images/2013/08/20130820-san-francisco-bread-taste-test-17.jpg",
-                  "subtitle":"$4 per loaf",
-                  "forPayload":"Sourdough"},
+                  "title"           :"Semi-Freddis Sourdough",
+                  "image_url"       :"http://www.seriouseats.com/images/2013/08/20130820-san-francisco-bread-taste-test-17.jpg",
+                  "subtitle"        :"$4 per loaf",
+                  "forPayloadOne"   :"1 bread1.2",
+                  "receiptSubtitle" :"Delicious loaf",
+                  "receiptPrice"    : 4},
                 "bread1.3":{
-                  "title":"Semi-Freddis Wheat Roll",
-                  "image_url":"http://www.semifreddis.com/uploads/media_items/deli-wheat.900.600.s.jpg",
-                  "subtitle":"$2.50 per loaf",
-                  "forPayload":"Wheat"}
+                  "title"           :"Semi-Freddis Wheat Roll",
+                  "image_url"       :"http://www.semifreddis.com/uploads/media_items/deli-wheat.900.600.s.jpg",
+                  "subtitle"        :"$2.50 per loaf",
+                  "forPayloadOne"   :"1 bread1.3",
+                  "receiptSubtitle" :"Delicious loaf",
+                  "receiptPrice"    : 2.5}
                       },
               "milk": {
                 "milk1.1":{
-                  "title":"Clover Fat Free (Gallon)",
-                  "image_url":"https://www.grubmarket.com/images/large/grubmarketdairy/9419646821_clover_organic_farms_fat_free_milk.jpg",
-                  "subtitle":"$3",
-                  "forPayload":"FatFree"},
+                  "title"           :"Clover Fat Free (Gallon)",
+                  "image_url"       :"https://www.grubmarket.com/images/large/grubmarketdairy/9419646821_clover_organic_farms_fat_free_milk.jpg",
+                  "subtitle"        :"$3",
+                  "forPayloadOne"   :"1 milk1.1",
+                  "receiptSubtitle" :"Delicious milk",
+                  "receiptPrice"    : 3},
                 "milk1.2":{
-                  "title":"Clover Chocolate Milk",
-                  "image_url":"https://s3.amazonaws.com/static.caloriecount.about.com/images/medium/clover-stornetta-farms-percent-172233.jpg",
-                  "subtitle":"$2",
-                  "forPayload":"ChocoMilk"},
+                  "title"           :"Clover Chocolate Milk",
+                  "image_url"       :"https://s3.amazonaws.com/static.caloriecount.about.com/images/medium/clover-stornetta-farms-percent-172233.jpg",
+                  "subtitle"        :"$2",
+                  "forPayloadOne"   :"1 milk1.2",
+                  "receiptSubtitle" :"Delicious milk",
+                  "receiptPrice"    : 2},
                 "milk1.3":{
-                  "title":"Clover Whole Milk",
-                  "image_url":"https://s3.amazonaws.com/static.caloriecount.about.com/images/medium/clover-organic-farms-milk-80300.jpg",
-                  "subtitle":"$4",
-                  "forPayload":"WholeMilk"}
+                  "title"           :"Clover Whole Milk",
+                  "image_url"       :"https://s3.amazonaws.com/static.caloriecount.about.com/images/medium/clover-organic-farms-milk-80300.jpg",
+                  "subtitle"        :"$4",
+                  "forPayloadOne"   :"1 milk1.3",
+                  "receiptSubtitle" :"Delicious milk",
+                  "receiptPrice"    : 4}
                 }
               }
 
+#create a list to check against for the postback to see when we are receiving a message that should add to the basket
+listForPostback = []
+for k in foods:
+  for x in foods[k]:
+    listForPostback.append(x)
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -167,6 +186,22 @@ def handle_messages():
     #    date_confirm(PAT, sender, message, cleanDateObject)
     #  except Exception:
     #    bad_date(PAT, sender, message)
+    elif message.split(' ')[1] in listForPostback:
+      itemInfoDicts=[]
+      basketAdd = message.split(' ')
+      for k in foods:
+        for thing in foods[k]:
+          if thing == basketAdd[1]:
+            basketAdd.append(k)
+      broadCat       = basketAdd[-1]
+      quantityChosen = basketAdd[0]
+      specificItem   = basketAdd[1]
+      receiptTitle   = foods[broadCat][specificItem]["title"]
+      receiptSub     = foods[broadCat][specificItem]["receiptSubtitle"]
+      thePrice       = foods[broadCat][specificItem]["receiptPrice"]
+      picture        = foods[broadCat][specificItem]["image_url"]
+      itemInfoDicts.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
+      send_receipt(PAT, sender, message, itemInfoDicts)
     elif message in dateList:
       deliveryDate = message
       print (deliveryDate)
@@ -578,7 +613,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 {
                 "type":"postback",
                 "title":"I want 1",
-                "payload":"OneCiabatta"
+                "payload":foods[orderedItem][item1_1]["forPayloadOne"]
                 },
                 {
                 "type":"postback",
@@ -600,7 +635,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 {
                 "type":"postback",
                 "title":"I want 1",
-                "payload":"OneSour"
+                "payload":foods[orderedItem][item1_2]["forPayloadOne"]
                 },
                 {
                 "type":"postback",
@@ -622,7 +657,7 @@ def browse_set1(token, recipient, text, orderedItem):
                 {
                 "type":"postback",
                 "title":"I want 1",
-                "payload":"OneWheat"
+                "payload":foods[orderedItem][item1_3]["forPayloadOne"]
                 },
                 {
                 "type":"postback",
