@@ -20,7 +20,7 @@ browse_list    = ["Bread!", "Beer!", "Milk!", "Cheese!", "Steak!"]
 take_back_list = []
 for stuff in menu_items:
   take_back_list.append("Eh, don't want %s" % stuff)
-itemInfoDicts = []
+
 raw_time_today = datetime.datetime.now()
 today          = "%s/%s/%s" % (raw_time_today.month, raw_time_today.day, raw_time_today.year)
 tomorrow       = "%s/%s" % (raw_time_today.month, raw_time_today.day + 1)
@@ -146,6 +146,7 @@ def handle_messages():
   print "Handling Messages"
   payload = request.get_data()
   print payload
+  itemInfoDicts = []
   for sender, message in messaging_events(payload):
     print "Incoming from %s: %s" % (sender, message)
     cleanDateObject = ''
@@ -173,7 +174,7 @@ def handle_messages():
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
     elif message == "Yes, let's order":
-      addToBasket("wipe",itemInfoDicts,{})
+      itemInfoDicts = []
       initial_item_prompt(PAT, sender, message)
     elif message == "back2categories":
       initial_item_prompt(PAT, sender, message)
@@ -202,8 +203,8 @@ def handle_messages():
       receiptSub     = foods[broadCat][specificItem]["receiptSubtitle"]
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
-      dictToAdd = {"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture}
-      addToBasket("add", itemInfoDicts, dictToAdd)
+      itemInfoDicts.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
+      #addToBasket("add", itemInfoDicts, dictToAdd)
       #send_receipt(PAT, sender, message, itemInfoDicts)
       followUp_item_prompt(PAT, sender, message)
     elif message in dateList:
@@ -220,13 +221,6 @@ def handle_messages():
     else:
       send_message(PAT, sender, message)
   return "ok"
-
-#create another function to handle the basket
-def addToBasket(command, masterList, orderDict):
-  if command == "add":
-    masterList.append(orderDict)
-  else:
-    masterList = []
 
 #For our send_message function, this is our rules set
 def messageDict(stuff):
