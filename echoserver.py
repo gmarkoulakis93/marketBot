@@ -172,7 +172,10 @@ def handle_messages():
       order_prompt(PAT, sender, message)
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
-    elif message == "Yes, let's order" or message == "back2categories":
+    elif message == "Yes, let's order":
+      itemInfoDicts = []
+      initial_item_prompt(PAT, sender, message)
+    elif message == "back2categories":
       initial_item_prompt(PAT, sender, message)
     elif message in browse_list:
       orderedItem = message[:-1].lower()
@@ -187,7 +190,6 @@ def handle_messages():
     #  except Exception:
     #    bad_date(PAT, sender, message)
     elif message.split(' ')[1] in listForPostback:
-      itemInfoDicts=[]
       basketAdd = message.split(' ')
       for k in foods:
         for thing in foods[k]:
