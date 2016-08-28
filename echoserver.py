@@ -139,6 +139,7 @@ def handle_verification():
     print "Verification failed!"
     return 'Error, wrong validation token'
 
+itemInfoDicts = []
 #function that posts to FB server
 #we also route what type of message we send depending on what the payload is
 @app.route('/', methods=['POST'])
