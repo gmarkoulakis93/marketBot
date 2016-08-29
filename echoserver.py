@@ -210,7 +210,10 @@ def handle_messages():
         masterDictList.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
       else:
         masterDictList = itemInfoDicts
-      print ("item dict now = %s" % itemInfoDicts)
+      try:
+        print ("item dict now = %s" % masterDictList)
+      except Exception:
+        print ("no master list yet")
       #addToBasket("add", itemInfoDicts, dictToAdd)
       #send_receipt(PAT, sender, message, itemInfoDicts)
       followUp_item_prompt(PAT, sender, message)
