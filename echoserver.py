@@ -215,7 +215,7 @@ def handle_messages():
         print ("item dict now = %s" % masterDictList)
       except Exception:
         print ("no master list yet")
-      if len(masterList) == 0:
+      if "masterList" not in locals():
         addToMasterList({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
       else:
         masterList.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
