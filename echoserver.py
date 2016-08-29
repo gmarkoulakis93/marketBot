@@ -9,6 +9,8 @@ import csv
 
 app = Flask(__name__)
 
+
+
 #https://delivery-testing.herokuapp.com/ place in "Callback URL" when not running locally
 
 # This is the page access token needed to talk to the Messenger API
@@ -203,7 +205,9 @@ def handle_messages():
       receiptSub     = foods[broadCat][specificItem]["receiptSubtitle"]
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
+      print ("item dict = %s" % itemInfoDicts)
       itemInfoDicts.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
+      print ("item dict now = %s" % itemInfoDicts)
       #addToBasket("add", itemInfoDicts, dictToAdd)
       #send_receipt(PAT, sender, message, itemInfoDicts)
       followUp_item_prompt(PAT, sender, message)
