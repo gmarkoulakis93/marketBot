@@ -205,8 +205,11 @@ def handle_messages():
       receiptSub     = foods[broadCat][specificItem]["receiptSubtitle"]
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
-      print ("item dict = %s" % itemInfoDicts)
       itemInfoDicts.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
+      if "masterDictList" in locals():
+        masterDictList.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
+      else:
+        masterDictList = itemInfoDicts
       print ("item dict now = %s" % itemInfoDicts)
       #addToBasket("add", itemInfoDicts, dictToAdd)
       #send_receipt(PAT, sender, message, itemInfoDicts)
