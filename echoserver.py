@@ -206,6 +206,7 @@ def handle_messages():
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
       itemInfoDicts.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
+      print ("masterDictList" in locals())
       if "masterDictList" in locals():
         masterDictList.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
       else:
