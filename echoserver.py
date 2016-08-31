@@ -778,6 +778,7 @@ def send_receipt(token, recipient, text, basket):
   quantities = {}
   for d in basket:
     quantities[d['title']] = d['quantity']
+  print(basket)
   cost       = sum(prices[k]*int(quantities[k]) for k in prices)
   print("cost = %d" % cost)
   #tax        = TAX_RATE * cost
