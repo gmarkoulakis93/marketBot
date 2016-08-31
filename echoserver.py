@@ -168,11 +168,11 @@ def handle_messages():
       tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
       noPunct(tuplesL)
       forReceipt(tuplesL, menu_items, order)
-      testBasket=[]
-      for pair in order:
-        testBasket.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
+      #testBasket=[]
+      #for pair in order:
+      #  testBasket.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
       pre_receipt(PAT, sender, message)
-      send_receipt(PAT, sender, message, testBasket)
+      #send_receipt(PAT, sender, message, testBasket)
       post_receipt(PAT, sender, message)
     elif message == "Hi": #expand this to check for a set of greetings
       order_prompt(PAT, sender, message)
@@ -213,8 +213,8 @@ def handle_messages():
       print(testBasket)
       #send_receipt(PAT, sender, message, basket)
       followUp_item_prompt(PAT, sender, message)
-    elif message == "Done! I'll pay now":
-      send_receipt(PAT, sender, message, testBasket)
+    #elif message == "Done! I'll pay now":
+    #  send_receipt(PAT, sender, message, testBasket)
     elif message in dateList:
       deliveryDate = message
       print (deliveryDate)
