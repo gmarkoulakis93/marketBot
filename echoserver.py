@@ -142,14 +142,11 @@ def handle_verification():
     print "Verification failed!"
     return 'Error, wrong validation token'
 
-masterList = []
-def addToMasterList(someDict):
-  masterList.append(someDict)
-  return masterList
 #function that posts to FB server
 #we also route what type of message we send depending on what the payload is
+basket = []
 @app.route('/', methods=['POST'])
-def handle_messages():
+def handle_messages(basket):
   print "Handling Messages"
   payload = request.get_data()
   print payload
@@ -210,23 +207,9 @@ def handle_messages():
       receiptSub     = foods[broadCat][specificItem]["receiptSubtitle"]
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
-      itemInfoDicts.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
-      try:
-        print ("item dict now = %s" % masterDictList)
-      except Exception:
-        print ("no master list yet")
-      if "masterList" not in locals():
-        addToMasterList({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
-      else:
-        masterList.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
-      # if "masterDictList" in locals():
-      #   masterDictList.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
-      # else:
-      #   masterDictList = itemInfoDicts
-      try:
-        print ("item dict now = %s" % masterDictList)
-      except Exception:
-        print ("no master list yet")
+      print(basket)
+      basket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
+      print(basket)
       #addToBasket("add", itemInfoDicts, dictToAdd)
       #send_receipt(PAT, sender, message, itemInfoDicts)
       followUp_item_prompt(PAT, sender, message)
