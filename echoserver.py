@@ -100,6 +100,8 @@ for k in foods:
   for x in foods[k]:
     listForPostback.append(x)
 
+#so for the basket, we append the list as long as the user is in the loop of choosing items
+#if they send "Clear basket" or "Yes let's order", we clear the basket
 basket = []
 
 #These dictionaries are used to populate the API requirements for the receipt template
@@ -151,7 +153,6 @@ def handle_messages():
   print "Handling Messages"
   payload = request.get_data()
   print payload
-  itemInfoDicts = []
   for sender, message in messaging_events(payload):
     print "Incoming from %s: %s" % (sender, message)
     cleanDateObject = ''
@@ -168,18 +169,18 @@ def handle_messages():
       tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
       noPunct(tuplesL)
       forReceipt(tuplesL, menu_items, order)
-      itemInfoDicts=[]
+      basket=[]
       for pair in order:
-        itemInfoDicts.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
+        basket.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
       pre_receipt(PAT, sender, message)
-      send_receipt(PAT, sender, message, itemInfoDicts)
+      send_receipt(PAT, sender, message, basket)
       post_receipt(PAT, sender, message)
     elif message == "Hi": #expand this to check for a set of greetings
       order_prompt(PAT, sender, message)
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
     elif message == "Yes, let's order":
-      itemInfoDicts = []
+      basket = []
       initial_item_prompt(PAT, sender, message)
     elif message == "back2categories":
       initial_item_prompt(PAT, sender, message)
@@ -208,12 +209,12 @@ def handle_messages():
       receiptSub     = foods[broadCat][specificItem]["receiptSubtitle"]
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
-      print(basket)
       basket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
       print(basket)
-      #addToBasket("add", itemInfoDicts, dictToAdd)
-      #send_receipt(PAT, sender, message, itemInfoDicts)
+      #send_receipt(PAT, sender, message, basket)
       followUp_item_prompt(PAT, sender, message)
+    elif message == "Done! I'll pay now":
+      send_receipt(PAT, sender, message, basket)
     elif message in dateList:
       deliveryDate = message
       print (deliveryDate)
@@ -510,8 +511,8 @@ def initial_item_prompt(token, recipient, text):
           },
           {
             "content_type":"text",
-            "title":"Coffee Beans!",
-            "payload":"sendCoffeeBeans"
+            "title":"Done! I'll pay now",
+            "payload":"sendCheckout"
           },
           {
             "content_type":"text",
@@ -568,8 +569,8 @@ def followUp_item_prompt(token, recipient, text):
           },
           {
             "content_type":"text",
-            "title":"Coffee Beans!",
-            "payload":"sendCoffeeBeans"
+            "title":"Done! I'll pay now",
+            "payload":"sendCheckout"
           },
           {
             "content_type":"text",
@@ -759,9 +760,9 @@ def browse_set1(token, recipient, text, orderedItem):
     print r.text
 
 
-#our receipt function that takes the itemInfoDicts created above to extract all the data we need
+#our receipt function that takes the basket created above to extract all the data we need
 #as you can see, the majority of the JSON elements are variable -- varies with user and input message
-def send_receipt(token, recipient, text, itemInfoDicts):
+def send_receipt(token, recipient, text, basket):
   """Send the message text to recipient with id recipient.
   """
   TAX_RATE   = .05
@@ -773,10 +774,10 @@ def send_receipt(token, recipient, text, itemInfoDicts):
   userCard   = findCardShort(recipient)
   recip_name = userFName + ' ' + userLName
   prices     = {}
-  for d in itemInfoDicts:
+  for d in basket:
     prices[d['title']] = d['price']
   quantities = {}
-  for d in itemInfoDicts:
+  for d in basket:
     quantities[d['title']] = d['quantity']
   cost       = sum(prices[k]*int(quantities[k]) for k in prices)
   tax        = TAX_RATE * cost
@@ -787,7 +788,7 @@ def send_receipt(token, recipient, text, itemInfoDicts):
       "attachment": {
         "type": "template", 
         "payload": {
-          "elements": itemInfoDicts, 
+          "elements": basket, 
           "payment_method": userCard,
           "timestamp": "1428444852", 
           "adjustments": [
