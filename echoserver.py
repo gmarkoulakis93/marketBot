@@ -146,7 +146,7 @@ def handle_verification():
 #we also route what type of message we send depending on what the payload is
 basket = []
 @app.route('/', methods=['POST'])
-def handle_messages(basket):
+def handle_messages():
   print "Handling Messages"
   payload = request.get_data()
   print payload
