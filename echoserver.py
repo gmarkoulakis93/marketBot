@@ -99,9 +99,9 @@ for k in foods:
   for x in foods[k]:
     listForPostback.append(x)
 
+testBasket = []
 #so for the basket, we append the list as long as the user is in the loop of choosing items
 #if they send "Clear basket" or "Yes let's order", we clear the basket
-testBasket = []
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -208,6 +208,7 @@ def handle_messages():
       receiptSub     = foods[broadCat][specificItem]["receiptSubtitle"]
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
+      print(testBasket)
       testBasket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
       print(testBasket)
       #send_receipt(PAT, sender, message, basket)
