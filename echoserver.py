@@ -179,7 +179,8 @@ def handle_messages():
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
     elif message == "Yes, let's order":
-      print("testBasket" in locals())
+      if "testBasket" in locals():
+        testBasket = []
       initial_item_prompt(PAT, sender, message)
     elif message == "back2categories":
       initial_item_prompt(PAT, sender, message)
