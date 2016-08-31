@@ -100,6 +100,8 @@ for k in foods:
   for x in foods[k]:
     listForPostback.append(x)
 
+basket = []
+
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
   return {
@@ -144,7 +146,6 @@ def handle_verification():
 
 #function that posts to FB server
 #we also route what type of message we send depending on what the payload is
-basket = []
 @app.route('/', methods=['POST'])
 def handle_messages():
   print "Handling Messages"
