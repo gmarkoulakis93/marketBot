@@ -213,8 +213,8 @@ def handle_messages():
       print(testBasket)
       #send_receipt(PAT, sender, message, basket)
       followUp_item_prompt(PAT, sender, message)
-    #elif message == "Done! I'll pay now":
-    #  send_receipt(PAT, sender, message, testBasket)
+    elif message == "Done! I'll pay now":
+      send_receipt(PAT, sender, message, testBasket)
     elif message in dateList:
       deliveryDate = message
       print (deliveryDate)
