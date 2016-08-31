@@ -208,6 +208,7 @@ def handle_messages():
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
       print(basket)
+      global basket
       basket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
       print(basket)
       #send_receipt(PAT, sender, message, basket)
