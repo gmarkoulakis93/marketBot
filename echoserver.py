@@ -39,7 +39,6 @@ timeList       = ["%s Time1: 3-4pm" % tomorrow,"%s Time2: 4-5pm" % tomorrow, "%s
                   "%s Time1: 3-4pm" % fourAfter,"%s Time2: 4-5pm" % fourAfter, "%s Time3: 5-6pm" % fourAfter,
                   "%s Time1: 3-4pm" % fiveAfter,"%s Time2: 4-5pm" % fiveAfter, "%s Time3: 5-6pm" % fiveAfter]
 
-myBasket       = []
 #create a dictionary that houses the appropriate data structure
 #e.g.,
 #foods = {bread: {bread1:{"title":"title1", "price":123},bread2:{"title":"title2", "price":222}}}
@@ -102,7 +101,7 @@ for k in foods:
 
 #so for the basket, we append the list as long as the user is in the loop of choosing items
 #if they send "Clear basket" or "Yes let's order", we clear the basket
-basket = []
+testBasket = []
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -169,18 +168,18 @@ def handle_messages():
       tuplesL  = [myList[i:i+n] for i in range(len(myList)-n+1)]
       noPunct(tuplesL)
       forReceipt(tuplesL, menu_items, order)
-      basket=[]
+      testBasket=[]
       for pair in order:
-        basket.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
+        testBasket.append({"title": titleDict(pair[1]),"subtitle":subtitle(pair[1]), "quantity":pair[0],"price":pricing(pair[1]),"currency":"USD","image_url":pic(pair[1])})
       pre_receipt(PAT, sender, message)
-      send_receipt(PAT, sender, message, basket)
+      send_receipt(PAT, sender, message, testBasket)
       post_receipt(PAT, sender, message)
     elif message == "Hi": #expand this to check for a set of greetings
       order_prompt(PAT, sender, message)
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
     elif message == "Yes, let's order":
-      basket = []
+      testBasket = []
       initial_item_prompt(PAT, sender, message)
     elif message == "back2categories":
       initial_item_prompt(PAT, sender, message)
@@ -209,12 +208,12 @@ def handle_messages():
       receiptSub     = foods[broadCat][specificItem]["receiptSubtitle"]
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
-      basket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
-      print(basket)
+      testBasket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
+      print(testBasket)
       #send_receipt(PAT, sender, message, basket)
       followUp_item_prompt(PAT, sender, message)
     elif message == "Done! I'll pay now":
-      send_receipt(PAT, sender, message, basket)
+      send_receipt(PAT, sender, message, testBasket)
     elif message in dateList:
       deliveryDate = message
       print (deliveryDate)
