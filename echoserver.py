@@ -99,7 +99,7 @@ for k in foods:
   for x in foods[k]:
     listForPostback.append(x)
 
-testBasket = []
+basket = []
 #so for the basket, we append the list as long as the user is in the loop of choosing items
 #if they send "Clear basket" or "Yes let's order", we clear the basket
 
@@ -179,8 +179,6 @@ def handle_messages():
     elif message == "Receipt Looks Good":
       potentialDeliveryDates(PAT, sender, message)
     elif message == "Yes, let's order":
-      if "testBasket" in locals():
-        testBasket = []
       initial_item_prompt(PAT, sender, message)
     elif message == "back2categories":
       initial_item_prompt(PAT, sender, message)
@@ -209,13 +207,13 @@ def handle_messages():
       receiptSub     = foods[broadCat][specificItem]["receiptSubtitle"]
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
-      print(testBasket)
-      testBasket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
-      print(testBasket)
+      print(basket)
+      basket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
+      print(basket)
       #send_receipt(PAT, sender, message, basket)
       followUp_item_prompt(PAT, sender, message)
     elif message == "Done! I'll pay now":
-      send_receipt(PAT, sender, message, testBasket)
+      send_receipt(PAT, sender, message, basket)
     elif message in dateList:
       deliveryDate = message
       print (deliveryDate)
