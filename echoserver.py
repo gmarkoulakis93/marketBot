@@ -9,13 +9,14 @@ import csv
 
 app = Flask(__name__)
 
-
+#for basket, try passing the basket addition as argument in subsequent message (after order) 
+#e.g., follow_up(PAT,...,message) and doing something with this to add to a basket
 
 #https://delivery-testing.herokuapp.com/ place in "Callback URL" when not running locally
 
 # This is the page access token needed to talk to the Messenger API
 PAT            = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKnq5T32wVjqZApG6bKOFujVdZAr2DX31SXTKqZC2ZCZAf8NBOHGqrtGwpGZB9sOWjar6n3XifD6G7ywuMrMNbH75dGpw9oYadgdtqVPCrhIU29p2pzwZDZD'
-
+basket = []
 #All the items that the user could order
 menu_items     = ["bread", "beer", "milk", "cheese", "steak"]
 browse_list    = ["Bread!", "Beer!", "Milk!", "Cheese!", "Steak!"]
@@ -45,63 +46,59 @@ timeList       = ["%s Time1: 3-4pm" % tomorrow,"%s Time2: 4-5pm" % tomorrow, "%s
 #build out the above and implement into JSON, remember, you'll need an extra argument in the carousel 
 #function and you'll need to capture the user's message in handle_messages
 
-foods      = {"bread": {
-                "bread1.1":{
-                  "title"           :"Semi-Freddis Ciabatta",
-                  "image_url"       :"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
-                  "subtitle"        :"$5 per loaf",
-                  "forPayloadOne"   :"1 bread1.1",
-                  "receiptSubtitle" :"Delicious loaf",
-                  "receiptPrice"    : 5},
-                "bread1.2":{
-                  "title"           :"Semi-Freddis Sourdough",
-                  "image_url"       :"http://www.seriouseats.com/images/2013/08/20130820-san-francisco-bread-taste-test-17.jpg",
-                  "subtitle"        :"$4 per loaf",
-                  "forPayloadOne"   :"1 bread1.2",
-                  "receiptSubtitle" :"Delicious loaf",
-                  "receiptPrice"    : 4},
-                "bread1.3":{
-                  "title"           :"Semi-Freddis Wheat Roll",
-                  "image_url"       :"http://www.semifreddis.com/uploads/media_items/deli-wheat.900.600.s.jpg",
-                  "subtitle"        :"$2.50 per loaf",
-                  "forPayloadOne"   :"1 bread1.3",
-                  "receiptSubtitle" :"Delicious loaf",
-                  "receiptPrice"    : 2.5}
-                      },
-              "milk": {
-                "milk1.1":{
-                  "title"           :"Clover Fat Free (Gallon)",
-                  "image_url"       :"https://www.grubmarket.com/images/large/grubmarketdairy/9419646821_clover_organic_farms_fat_free_milk.jpg",
-                  "subtitle"        :"$3",
-                  "forPayloadOne"   :"1 milk1.1",
-                  "receiptSubtitle" :"Delicious milk",
-                  "receiptPrice"    : 3},
-                "milk1.2":{
-                  "title"           :"Clover Chocolate Milk",
-                  "image_url"       :"https://s3.amazonaws.com/static.caloriecount.about.com/images/medium/clover-stornetta-farms-percent-172233.jpg",
-                  "subtitle"        :"$2",
-                  "forPayloadOne"   :"1 milk1.2",
-                  "receiptSubtitle" :"Delicious milk",
-                  "receiptPrice"    : 2},
-                "milk1.3":{
-                  "title"           :"Clover Whole Milk",
-                  "image_url"       :"https://s3.amazonaws.com/static.caloriecount.about.com/images/medium/clover-organic-farms-milk-80300.jpg",
-                  "subtitle"        :"$4",
-                  "forPayloadOne"   :"1 milk1.3",
-                  "receiptSubtitle" :"Delicious milk",
-                  "receiptPrice"    : 4}
+foods      = {
+              "bread":{
+                  "bread1.1":{
+                    "title"           :"Semi-Freddis Ciabatta",
+                    "image_url"       :"http://www.hungryhungryhippie.com/wp-content/uploads/2012/01/IMG_5171.jpg",
+                    "subtitle"        :"$5 per loaf",
+                    "forPayloadOne"   :"1 bread1.1",
+                    "receiptSubtitle" :"Delicious loaf",
+                    "receiptPrice"    : 5},
+                  "bread1.2":{
+                    "title"           :"Semi-Freddis Sourdough",
+                    "image_url"       :"http://www.seriouseats.com/images/2013/08/20130820-san-francisco-bread-taste-test-17.jpg",
+                    "subtitle"        :"$4 per loaf",
+                    "forPayloadOne"   :"1 bread1.2",
+                    "receiptSubtitle" :"Delicious loaf",
+                    "receiptPrice"    : 4},
+                  "bread1.3":{
+                    "title"           :"Semi-Freddis Wheat Roll",
+                    "image_url"       :"http://www.semifreddis.com/uploads/media_items/deli-wheat.900.600.s.jpg",
+                    "subtitle"        :"$2.50 per loaf",
+                    "forPayloadOne"   :"1 bread1.3",
+                    "receiptSubtitle" :"Delicious loaf",
+                    "receiptPrice"    : 2.5}
+                        },
+                "milk": {
+                  "milk1.1":{
+                    "title"           :"Clover Fat Free (Gallon)",
+                    "image_url"       :"https://www.grubmarket.com/images/large/grubmarketdairy/9419646821_clover_organic_farms_fat_free_milk.jpg",
+                    "subtitle"        :"$3",
+                    "forPayloadOne"   :"1 milk1.1",
+                    "receiptSubtitle" :"Delicious milk",
+                    "receiptPrice"    : 3},
+                  "milk1.2":{
+                    "title"           :"Clover Chocolate Milk",
+                    "image_url"       :"https://s3.amazonaws.com/static.caloriecount.about.com/images/medium/clover-stornetta-farms-percent-172233.jpg",
+                    "subtitle"        :"$2",
+                    "forPayloadOne"   :"1 milk1.2",
+                    "receiptSubtitle" :"Delicious milk",
+                    "receiptPrice"    : 2},
+                  "milk1.3":{
+                    "title"           :"Clover Whole Milk",
+                    "image_url"       :"https://s3.amazonaws.com/static.caloriecount.about.com/images/medium/clover-organic-farms-milk-80300.jpg",
+                    "subtitle"        :"$4",
+                    "forPayloadOne"   :"1 milk1.3",
+                    "receiptSubtitle" :"Delicious milk",
+                    "receiptPrice"    : 4}
+                  }
                 }
-              }
-
 #create a list to check against for the postback to see when we are receiving a message that should add to the basket
 listForPostback = []
 for k in foods:
   for x in foods[k]:
     listForPostback.append(x)
-
-basket = []
-#so for the basket, we append the list as long as the user is in the loop of choosing items
-#if they send "Clear basket" or "Yes let's order", we clear the basket
 
 #These dictionaries are used to populate the API requirements for the receipt template
 def titleDict(food):
@@ -207,14 +204,13 @@ def handle_messages():
       receiptSub     = foods[broadCat][specificItem]["receiptSubtitle"]
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
+      #fix the below
       print(basket)
-      global basket
       basket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
       print(basket)
-      #send_receipt(PAT, sender, message, basket)
       followUp_item_prompt(PAT, sender, message)
     elif message == "Done! I'll pay now":
-      send_receipt(PAT, sender, message, basket)
+      send_receipt(PAT, sender, message, basket) #fix this
     elif message in dateList:
       deliveryDate = message
       print (deliveryDate)
