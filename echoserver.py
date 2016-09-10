@@ -205,7 +205,10 @@ def handle_messages():
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
       #fix the below
-      print(basket)
+      try:
+        print(basket)
+      except Exception:
+        basket = []
       basket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
       print(basket)
       followUp_item_prompt(PAT, sender, message)
