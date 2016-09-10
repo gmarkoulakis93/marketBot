@@ -211,6 +211,7 @@ def handle_messages():
       followUp_item_prompt(PAT, sender, message)
     elif message == "Done! I'll pay now":
       send_receipt(PAT, sender, message, basket) #fix this
+      basket = []
     elif message in dateList:
       deliveryDate = message
       print (deliveryDate)
