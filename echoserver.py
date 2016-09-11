@@ -736,6 +736,28 @@ def browse_set1(token, recipient, text, orderedItem):
                 "payload":"back2categories"
                 }
                 ]
+            },
+            {
+            "title":"Other options!",
+              "image_url":"http://www.pastoralartisan.com/skin/frontend/default/theme693/images/FrenchMarketLocation.jpg",
+              "subtitle":"Other stuff you can do",
+              "buttons":[
+                {
+                "type":"postback",
+                "title":"Ready for checkout!",
+                "payload":"checkoutAndBuy"
+                },
+                {
+                "type":"postback",
+                "title":"Can I see my basket?",
+                "payload":"seeBasket"
+                },
+                {
+                "type":"postback",
+                "title":"Can I see more %s?" % orderedItem,
+                "payload":"nextItemList"
+                }
+                ]
             }
           ]
         }
