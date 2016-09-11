@@ -16,10 +16,6 @@ app = Flask(__name__)
 
 # This is the page access token needed to talk to the Messenger API
 PAT            = 'EAAZAwMVNt37kBAMcdxj0eCz4lcT0s08mShKBE3O9JzwTgLHsCgFM5pj9bZBKnq5T32wVjqZApG6bKOFujVdZAr2DX31SXTKqZC2ZCZAf8NBOHGqrtGwpGZB9sOWjar6n3XifD6G7ywuMrMNbH75dGpw9oYadgdtqVPCrhIU29p2pzwZDZD'
-class Basket():
-  def __init__(self, masterBasket):
-    self.masterBasket = masterBasket
-placeOrder = Basket([])
 
 #All the items that the user could order
 menu_items     = ["bread", "beer", "milk", "cheese", "steak"]
@@ -209,13 +205,10 @@ def handle_messages():
       thePrice       = foods[broadCat][specificItem]["receiptPrice"]
       picture        = foods[broadCat][specificItem]["image_url"]
       #fix the below
-      dToAdd         = {"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture} 
-      placeOrder.masterBasket.append(dToAdd)
       #basket.append({"title": receiptTitle,"subtitle":receiptSub, "quantity":quantityChosen,"price":thePrice,"currency":"USD","image_url":picture})
-      print(placeOrder.masterBasket)
       followUp_item_prompt(PAT, sender, message)
     elif message == "Done! I'll pay now":
-      send_receipt(PAT, sender, message, placeOrder.masterBasket) #fix this
+      send_receipt(PAT, sender, message, basket) #fix this
       placeOrder.masterBasket = []
     elif message in dateList:
       deliveryDate = message
@@ -508,8 +501,8 @@ def initial_item_prompt(token, recipient, text):
           },
           {
             "content_type":"text",
-            "title":"Meats!",
-            "payload":"sendMeats"
+            "title":"Can I see my basket?",
+            "payload":"seeBasket"
           },
           {
             "content_type":"text",
