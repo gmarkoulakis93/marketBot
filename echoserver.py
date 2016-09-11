@@ -688,11 +688,6 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"View product details",
-                "payload":"productDeets"
-                },
-                {
-                "type":"postback",
                 "title": take_back_thing,
                 "payload":"back2categories"
                 }
@@ -715,11 +710,6 @@ def browse_set1(token, recipient, text, orderedItem):
                 },
                 {
                 "type":"postback",
-                "title":"View product details",
-                "payload":"productDeets"
-                },
-                {
-                "type":"postback",
                 "title": take_back_thing,
                 "payload":"back2categories"
                 }
@@ -739,11 +729,6 @@ def browse_set1(token, recipient, text, orderedItem):
                 "type":"postback",
                 "title":"I want more than 1",
                 "payload":"MoreWheat"
-                },
-                {
-                "type":"postback",
-                "title":"View product details",
-                "payload":"productDeets"
                 },
                 {
                 "type":"postback",
